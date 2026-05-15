@@ -61,9 +61,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         h2 { text-align: center; }
 
-        .form-row { margin-bottom: 15px; }
+        .form-row { margin-bottom: 15px;
+         }
 
-        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        label { display: block; 
+        font-weight: bold;
+         margin-bottom: 5px; }
 
         input, select {
             width: 100%;
