@@ -1,31 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>User Registration</title>
+    <title> Receptionist Registration </title>
 </head>
 <body>
 <style>
 body {
     font-family: Arial, sans-serif;
     background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
 }
 
 .container {
-    width: 400px;
-    margin: 50px auto;
+    width: 340px;
+    max-width: 90%;
+    margin: 20px auto;
     background: #fff;
-    padding: 20px;
+    padding: 18px;
     border-radius: 10px;
-
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 }
 
 h2 {
     text-align: center;
+    color: #b949cde8;
+    background-color: #d8ebe3de;
+    padding: 10px;
+    font-size: 1.2rem;
+    margin: 0 0 16px;
 }
 
 label {
     font-weight: bold;
+    font-size: 0.95rem;
 }
+
 
 input, select {
     width: 100%;
@@ -33,6 +46,7 @@ input, select {
     margin: 5px 0 15px 0;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 0.95rem;
 }
 
 input[type="submit"] {
@@ -40,17 +54,18 @@ input[type="submit"] {
     color: white;
     border: none;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 15px;
+    padding: 10px 0;
 }
 
 input[type="submit"]:hover {
     background-color: #31ba85de;
 }
 </style>
-    <h2>User Registration Form</h2>
+    <div class="container">
+        <h2>Receptionist Registration Form</h2>
 
-    <form action="register.php" method="POST" enctype="multipart/form-data">
-
+        <form action="register.php" method="POST" enctype="multipart/form-data">
         <label>Name:</label><br>
         <input type="text" name="name" required><br><br>
 
@@ -80,6 +95,7 @@ input[type="submit"]:hover {
         <input type="submit" name="register" value="Register">
 
     </form>
+    </div>
 
 </body>
 </html>
