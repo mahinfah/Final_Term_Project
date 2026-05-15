@@ -1,10 +1,9 @@
 <?php
 session_start();
-require_once 'models/User.php';
+require_once __DIR__ . '/models/User.php';
 
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
-    
     switch ($_SESSION['role']) {
         case 'patient':
             header('Location: controllers/PatientController.php');
@@ -19,7 +18,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
             header('Location: receptionist.php');
             exit;
         default:
-            
             session_destroy();
             header('Location: index.php');
             exit;
@@ -40,12 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         $loggedInUser = $user->login($email, $password);
 
         if ($loggedInUser && $loggedInUser['role'] === $role && $loggedInUser['is_active'] == 1) {
-            
             $_SESSION['user_id'] = $loggedInUser['id'];
             $_SESSION['role'] = $loggedInUser['role'];
             $_SESSION['username'] = $loggedInUser['name'];
 
-            
             switch ($role) {
                 case 'patient':
                     header('Location: controllers/PatientController.php');
@@ -69,5 +65,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
 }
 
 
-include 'views/login.php';
+include __DIR__ . '/views/login.php';
 ?>
