@@ -1,6 +1,6 @@
 <?php
-require_once 'models/User.php';
-require_once 'models/Patient.php';
+require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../models/Patient.php';
 
 $error = "";
 
@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $emergency_phone = trim($_POST['emergency_phone']);
     $medical_history = trim($_POST['medical_history']);
 
-    // Validation
     if (empty($name) || empty($email) || empty($password) || empty($phone)) {
         $error = "Name, Email, Password and Phone are required.";
     } elseif (strlen($password) < 6) {
@@ -28,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($user_id) {
             $patient = new Patient();
             $patient->create($user_id, $dob, $blood_group, $gender, $address, $emergency_name, $emergency_phone, $medical_history);
-            header("Location: index.php?registered=1");
+           header("Location: ../index.php?registered=1");
             exit;
         } else {
             $error = "Registration failed. Email may already exist.";
@@ -90,6 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="error"><?php echo htmlspecialchars($error); ?></div>
     <?php endif; ?>
     <form method="post">
+        <!-- your form fields (keep as is) -->
         <div class="form-row">
             <label>Full Name *</label>
             <input type="text" name="name" required>
@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <button type="submit">Register</button>
     </form>
     <div class="login-link">
-        Already have an account? <a href="index.php">Login here</a>
+        Already have an account? <a href="../index.php">Login here</a>
     </div>
 </div>
 </body>

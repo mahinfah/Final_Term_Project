@@ -1,5 +1,5 @@
 <?php
-session_start();
+//session_start();
 require_once 'models/User.php';
 
 $error = "";
@@ -138,10 +138,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
         <button type="submit" name="login">Login</button>
+        <?php if(isset($_GET['registered'])) echo "<p class='success'>Registered! Please login.</p>"; ?>
     </form>
 
     <div class="register-links">
-        <p>New Patient? <a href="register.php">Register here</a></p>
+        <p>New Patient? <a href="views/register.php">Register here</a></p>
         <!-- For other roles, accounts must be created by Admin -->
     </div>
 </div>
