@@ -1,0 +1,126 @@
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+/* Navigation bar */
+.nav {
+    background: #333;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    margin-right: 15px;
+    padding: 5px 8px;
+}
+
+.nav a:hover {
+    background: #555;
+    border-radius: 3px;
+}
+
+/* Headings */
+h2, h3 {
+    color: #333;
+}
+
+/* Forms */
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    display: inline-block;
+    width: 180px;
+    margin-bottom: 5px;
+}
+
+input, select, textarea {
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    width: 250px;
+    margin-bottom: 10px;
+}
+
+button, input[type="submit"] {
+    background: #007BFF;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+button:hover, input[type="submit"]:hover {
+    background: #0056b3;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background: #f2f2f2;
+}
+
+/* Messages */
+.success {
+    color: green;
+    background: #e6ffe6;
+    padding: 8px;
+    border: 1px solid green;
+    border-radius: 3px;
+    margin: 10px 0;
+}
+
+.error {
+    color: red;
+    background: #ffe6e6;
+    padding: 8px;
+    border: 1px solid red;
+    border-radius: 3px;
+    margin: 10px 0;
+}
+
+/* Links */
+a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Utility */
+hr {
+    margin: 20px 0;
+}
