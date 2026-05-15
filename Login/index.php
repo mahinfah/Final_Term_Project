@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: patient.php");
                 exit();
             case "receptionist":
-                header("Location: receptionist.php");
+                header("Location: .//RECEPTIONIST/VIEW/receptionist_dashboard.php");
                 exit();
             default:
                 $error = "Please select a valid role.";
@@ -130,7 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="register_admin.php">Admin</a> |
         <a href="register_doctor.php">Doctor</a> |
         <a href="register_patient.php">Patient</a> |
-        <a href="register_receptionist.php">Receptionist</a>
+        <a href=".//RECEPTIONIST/VIEW/registration_rep.php">Receptionist</a>
     </div>
 </div>
 
