@@ -24,12 +24,12 @@ require_once '../CONTROLLER/total_app.php';
         padding: 20px 30px;
         box-shadow: 0 2px 8px rgba(229, 62, 62, 0.84);
         text-align: center;
-        border-top: 4px solid #3498db;
+        border-top: 22px solid #3498db;
     }
 
     .stat-box p {
         font-size: 13px;
-        color: #777;
+        color: #c73d3d;
     }
 
     .stat-box span {
