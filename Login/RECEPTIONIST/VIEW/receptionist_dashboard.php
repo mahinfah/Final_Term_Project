@@ -91,7 +91,7 @@
         <td>Sara</td>
         <td>11:00 AM</td>
         <td>Pending</td>
-      </tr>
+      </tr>S
     </table>
   </div>
 

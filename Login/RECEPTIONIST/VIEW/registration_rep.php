@@ -22,7 +22,7 @@ body {
     width: 340px;
     max-width: 90%;
     margin: 20px auto;
-    background: #fff;
+    background: #fdc3d3df;
     padding: 18px;
     border-radius: 10px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
@@ -40,6 +40,8 @@ h2 {
 label {
     font-weight: bold;
     font-size: 0.95rem;
+    margin-left: 10px;
+    
 }
 
 
@@ -51,6 +53,11 @@ button {
     padding: 10px 16px;
     border-radius: 5px;
     cursor: pointer;
+}
+
+#login {
+    background-color: #4CAF50;
+    margin-left: 10px;
 }
 
 button:hover {
@@ -72,13 +79,13 @@ if (isset($_SESSION['msg'])) {
 ?>
         <form action="../CONTROLLER/regform_validation.php" method="POST" enctype="multipart/form-data">
         <label>Name:</label><br>
-        <input type="text" name="name" required><br><br>
+        <input type="text" name="name" ><br><br>
 
         <label>Email:</label><br>
-        <input type="email" name="email" required><br><br>
+        <input type="email" name="email" ><br><br>
 
         <label>Password:</label><br>
-        <input type="password" name="password" required><br><br>
+        <input type="password" name="password" ><br><br>
 
         <label>Phone:</label><br>
         <input type="text" name="phone"><br><br>
@@ -97,12 +104,14 @@ if (isset($_SESSION['msg'])) {
             <option value="0">Inactive</option>
         </select><br><br>
 
-       	<button type="submit" name="action" id="insert" value="insert">Insert</button>
-        
+       	<button type="submit" name="action" id="insert" value="insert">Register</button>
+        <button type="submit" name="action" value="login">Login</button>
+
 	<span id="msg"></span>
 
+  
     </form>
-<script src="../Script/valid.js"></script>
+
     </div>
 
 </body>

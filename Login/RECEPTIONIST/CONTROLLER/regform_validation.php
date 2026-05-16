@@ -14,11 +14,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $role       = $_POST['role'] ?? 'receptionist';
     $is_active  = isset($_POST['is_active']) ? (int)$_POST['is_active'] : 0;
     $action     = $_POST['action'] ?? '';
+    
 
     $profilePicPath = '';
     $_SESSION['msg'] = "";
 
-    // Validation
+  
+
+if ($action === "login") {
+    header("Location: ../../index.php");
+    exit;
+}
+
     if (empty($name) || empty($email) || empty($password) || empty($phone)) {
 
         $_SESSION['msg'] = "All fields are required";
@@ -66,7 +73,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['msg'] = "Email already exists";
                 }
 
-            } else {
+            }
+             
+            else {
 
                 $_SESSION['msg'] = "Invalid action";
 
