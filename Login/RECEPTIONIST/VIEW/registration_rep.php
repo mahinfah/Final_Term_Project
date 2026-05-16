@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,32 +43,34 @@ label {
 }
 
 
-input, select {
-    width: 100%;
-    padding: 8px;
-    margin: 5px 0 15px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 0.95rem;
-}
 
-input[type="submit"] {
-    background-color: #903e9fe8;
-    color: white;
+button {
+    background-color: #6dd9fa;
+    color: #ffffff;
     border: none;
+    padding: 10px 16px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 15px;
-    padding: 10px 0;
 }
 
-input[type="submit"]:hover {
-    background-color: #31ba85de;
+button:hover {
+    background-color: #45a049;
 }
+
 </style>
     <div class="container">
         <h2>Receptionist Registration Form</h2>
+        
 
-        <form action="register.php" method="POST" enctype="multipart/form-data">
+<?php
+
+
+if (isset($_SESSION['msg'])) {
+    echo "<p>" . $_SESSION['msg'] . "</p>";
+    unset($_SESSION['msg']);
+}
+?>
+        <form action="../CONTROLLER/regform_validation.php" method="POST" enctype="multipart/form-data">
         <label>Name:</label><br>
         <input type="text" name="name" required><br><br>
 
@@ -84,7 +89,7 @@ input[type="submit"]:hover {
         </select><br><br>
 
         <label>Profile Picture:</label><br>
-        <input type="file" name="profile_pic"><br><br>
+        <input type="file" name="profile_pic" accept="image/*"><br><br>
 
         <label>Active Status:</label><br>
         <select name="is_active">
@@ -92,9 +97,12 @@ input[type="submit"]:hover {
             <option value="0">Inactive</option>
         </select><br><br>
 
-        <input type="submit" name="register" value="Register">
+       	<button type="submit" name="action" id="insert" value="insert">Insert</button>
+        
+	<span id="msg"></span>
 
     </form>
+<script src="../Script/valid.js"></script>
     </div>
 
 </body>
