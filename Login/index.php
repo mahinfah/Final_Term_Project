@@ -1,141 +1,126 @@
 <?php
 session_start();
 
-$error = "";
+// CORRECT PATHS based on your structure
+require_once 'RECEPTIONIST/MODEL/db_connection.php';
+require_once 'RECEPTIONIST/MODEL/db_manupulation.php';
+require_once 'RECEPTIONIST/MODEL/db_close.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $role = $_POST["role"];
-    $username = $_POST["username"];
-    $password = $_POST["password"];
+$_SESSION['msg'] = "";
 
-    // Fixed credentials
-    if ($username === "webtech" && $password === "1234") {
+$action = $_POST['action'] ?? '';
 
-        $_SESSION["role"] = $role;
-        $_SESSION["user"] = $username;
+if ($action === "login") {
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $role = $_POST['role'] ?? '';
 
-        // Role-based redirect
-        switch ($role) {
-            case "admin":
-                header("Location: admin.php");
-                exit();
-            case "doctor":
-                header("Location: doctor.php");
-                exit();
-            case "patient":
-                header("Location: patient.php");
-                exit();
-            case "receptionist":
-                header("Location: receptionist.php");
-                exit();
-            default:
-                $error = "Please select a valid role.";
+    if (empty($email) || empty($password) || empty($role)) {
+        $_SESSION['msg'] = "Email, password, and role required";
+        header("Location: index.php");
+        exit;
+    }
+
+    $conn = conn_open();
+
+    if ($conn) {
+        $sql = "SELECT * FROM users WHERE email='$email' AND password_hash='$password' AND role='$role'";
+        $result = $conn->query($sql);
+
+        if ($result && $result->num_rows > 0) {
+            $_SESSION['msg'] = "Login Successful";
+            header("Location: RECEPTIONIST/VIEW/receptionist_dashboard.php");
+            exit;
+        } else {
+            $_SESSION['msg'] = "Invalid login details";
         }
 
+        conn_close($conn);
     } else {
-        $error = "Invalid username or password!";
+        $_SESSION['msg'] = "Database connection failed";
     }
+
+    header("Location: index.php");
+    exit;
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Hospital Login</title>
+    <title>Login</title>
     <style>
         body {
+            margin: 0;
             font-family: Arial;
-            background: #f4f4f4;
-            padding: 50px;
+            background: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-
-        .login-box {
+        .container {
             background: white;
-            width: 300px;
-            margin: auto;
-            padding: 20px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+            width: 320px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-
-        h2 { text-align: center; }
-
-        .form-row { margin-bottom: 15px;
-         }
-
-        label { display: block; 
-        font-weight: bold;
-         margin-bottom: 5px; }
-
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
         input, select {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
         }
-
         button {
             width: 100%;
             padding: 10px;
             background: blue;
             color: white;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
         }
-
-        button:hover { background: darkblue; }
-
+        button:hover {
+            background: darkblue;
+        }
         .error {
             color: red;
             text-align: center;
             margin-bottom: 10px;
         }
-
-        .register-links {
-            text-align: center;
-            margin-top: 10px;
-        }
     </style>
 </head>
 <body>
+<div class="container">
+    <h2>Login</h2>
+    
+    <?php if(isset($_SESSION['msg']) && !empty($_SESSION['msg'])): ?>
+        <div class="error"><?php echo htmlspecialchars($_SESSION['msg']); ?></div>
+        <?php $_SESSION['msg'] = ''; ?>
+    <?php endif; ?>
 
-<div class="login-box">
-    <h2>Hospital Login</h2>
+    <form method="POST" action="">
+        <input type="hidden" name="action" value="login">
+        
+        <select name="role" required>
+            <option value="">Select Role</option>
+            <option value="admin">Admin</option>
+            <option value="doctor">Doctor</option>
+            <option value="patient">Patient</option>
+            <option value="receptionist">Receptionist</option>
+        </select>
 
-    <?php if ($error != "") echo "<div class='error'>$error</div>"; ?>
-
-    <form method="POST">
-        <div class="form-row">
-            <label>Select Role:</label>
-            <select name="role" required>
-                <option value="">-- Select --</option>
-                <option value="admin">Admin</option>
-                <option value="doctor">Doctor</option>
-                <option value="patient">Patient</option>
-                <option value="receptionist">Receptionist</option>
-            </select>
-        </div>
-
-        <div class="form-row">
-            <label>Username:</label>
-            <input type="text" name="username" required>
-        </div>
-
-        <div class="form-row">
-            <label>Password:</label>
-            <input type="password" name="password" required>
-        </div>
-
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Login</button>
     </form>
-
-    <div class="register-links">
-        <p>Create Account:</p>
-        <a href="register_admin.php">Admin</a> |
-        <a href="register_doctor.php">Doctor</a> |
-        <a href="register_patient.php">Patient</a> |
-        <a href="register_receptionist.php">Receptionist</a>
-    </div>
 </div>
-
 </body>
 </html>
