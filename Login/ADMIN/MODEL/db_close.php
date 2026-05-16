@@ -1,8 +1,6 @@
 <?php
-	function conn_open(){
-		$conn = mysqli_connect("localhost","root","","hospital_db");
 
-		if(!$conn) die("error".mysqli_connect_error());
-		return $conn;
-	}
+function conn_close($conn){
+	mysqli_close($conn);
+}	
 ?>

@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-// CORRECT PATHS based on your structure
-require_once 'RECEPTIONIST/MODEL/db_connection.php';
-require_once 'RECEPTIONIST/MODEL/db_manupulation.php';
-require_once 'RECEPTIONIST/MODEL/db_close.php';
+
+require_once 'ADMIN/MODEL/db_connection.php';
+require_once 'ADMIN/MODEL/db_manupulation.php';
+require_once 'ADMIN/MODEL/db_close.php';
 
 $_SESSION['msg'] = "";
 
@@ -20,16 +20,15 @@ if ($action === "login") {
         header("Location: index.php");
         exit;
     }
-
-    $conn = conn_open();
-
+ $conn = conn_open();
+   
     if ($conn) {
         $sql = "SELECT * FROM users WHERE email='$email' AND password_hash='$password' AND role='$role'";
         $result = $conn->query($sql);
 
         if ($result && $result->num_rows > 0) {
             $_SESSION['msg'] = "Login Successful";
-            header("Location: RECEPTIONIST/VIEW/receptionist_dashboard.php");
+            header("Location: ADMIN/VIEW/admin_dashboard.php");
             exit;
         } else {
             $_SESSION['msg'] = "Invalid login details";
