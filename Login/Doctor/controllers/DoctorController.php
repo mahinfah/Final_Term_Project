@@ -1,10 +1,14 @@
 <?php
 session_start();
-require_once 'models/Doctor.php';
-require_once 'models/Appointment.php';
-require_once 'models/ConsultationNote.php';
-require_once 'models/Review.php';
-require_once 'models/Message.php';
+
+define('ROOT_PATH', dirname(__DIR__) . '/');
+
+require_once ROOT_PATH . 'config/database.php';
+require_once ROOT_PATH . 'models/Doctor.php';
+require_once ROOT_PATH . 'models/Appointment.php';
+require_once ROOT_PATH . 'models/ConsultationNote.php';
+require_once ROOT_PATH . 'models/Review.php';
+require_once ROOT_PATH . 'models/Message.php';
 
 class DoctorController {
     private $db, $doctorModel, $appointmentModel, $consultModel, $reviewModel, $messageModel;
@@ -48,7 +52,7 @@ class DoctorController {
                 $error = "Invalid email or password";
             }
         }
-        include 'views/doctor/login.php';
+        include ROOT_PATH . 'views/doctor/login.php';
     }
 
     public function dashboard() {
@@ -57,7 +61,7 @@ class DoctorController {
         $pending = $this->db->select("SELECT COUNT(*) as cnt FROM appointments WHERE doctor_id=? AND appointment_date=? AND status='pending'", [$this->doctor_id, $today], "is")->fetch_assoc()['cnt'];
         $confirmed = $this->db->select("SELECT COUNT(*) as cnt FROM appointments WHERE doctor_id=? AND appointment_date=? AND status='confirmed'", [$this->doctor_id, $today], "is")->fetch_assoc()['cnt'];
         $completed = $this->db->select("SELECT COUNT(*) as cnt FROM appointments WHERE doctor_id=? AND status='completed'", [$this->doctor_id], "i")->fetch_assoc()['cnt'];
-        include 'views/doctor/dashboard.php';
+        include ROOT_PATH . 'views/doctor/dashboard.php';
     }
 
     public function profile() {
@@ -84,7 +88,7 @@ class DoctorController {
         }
         $doctor = $this->doctorModel->getDoctorByUserId($this->user_id);
         $specializations = $this->doctorModel->getSpecializations();
-        include 'views/doctor/profile.php';
+        include ROOT_PATH . 'views/doctor/profile.php';
     }
 
     public function availability() {
@@ -109,7 +113,7 @@ class DoctorController {
         while ($row = $result->fetch_assoc()) {
             $avail[$row['day_of_week']] = $row;
         }
-        include 'views/doctor/availability.php';
+        include ROOT_PATH . 'views/doctor/availability.php';
     }
 
     public function leaveDates() {
@@ -126,13 +130,13 @@ class DoctorController {
             exit;
         }
         $leaves = $this->db->select("SELECT * FROM leave_dates WHERE doctor_id=? ORDER BY leave_date", [$this->doctor_id], "i")->fetch_all(MYSQLI_ASSOC);
-        include 'views/doctor/leave_dates.php';
+        include ROOT_PATH . 'views/doctor/leave_dates.php';
     }
 
     public function todaySchedule() {
         $this->isLoggedIn();
         $appointments = $this->appointmentModel->getTodayAppointments($this->doctor_id);
-        include 'views/doctor/today_schedule.php';
+        include ROOT_PATH . 'views/doctor/today_schedule.php';
     }
 
     public function weeklyCalendar() {
@@ -140,7 +144,7 @@ class DoctorController {
         $start = date('Y-m-d');
         $end = date('Y-m-d', strtotime('+6 days'));
         $appointments = $this->appointmentModel->getWeeklyAppointments($this->doctor_id, $start, $end);
-        include 'views/doctor/weekly_calendar.php';
+        include ROOT_PATH . 'views/doctor/weekly_calendar.php';
     }
 
     public function confirmAppointment() {
@@ -196,20 +200,20 @@ class DoctorController {
         }
         $appointment_id = $_GET['id'];
         $appointment = $this->appointmentModel->getAppointmentById($appointment_id, $this->doctor_id);
-        include 'views/doctor/consultation_note.php';
+        include ROOT_PATH . 'views/doctor/consultation_note.php';
     }
 
     public function patientNotes() {
         $this->isLoggedIn();
         $patient_user_id = $_GET['patient_id'];
         $notes = $this->consultModel->getPatientNotes($this->doctor_id, $patient_user_id);
-        include 'views/doctor/patient_notes.php';
+        include ROOT_PATH . 'views/doctor/patient_notes.php';
     }
 
     public function reviews() {
         $this->isLoggedIn();
         $reviews = $this->reviewModel->getForDoctor($this->doctor_id);
-        include 'views/doctor/reviews.php';
+        include ROOT_PATH . 'views/doctor/reviews.php';
     }
 
     public function replyReview() {
@@ -236,7 +240,7 @@ class DoctorController {
                 GROUP BY label ORDER BY label DESC LIMIT 12";
         $result = $this->db->select($sql, [$this->doctor_id], "i");
         $earnings = $result->fetch_all(MYSQLI_ASSOC);
-        include 'views/doctor/earnings.php';
+        include ROOT_PATH . 'views/doctor/earnings.php';
     }
 
     public function statistics() {
@@ -253,13 +257,13 @@ class DoctorController {
         $busy_days = $this->db->select("SELECT DAYNAME(appointment_date) as day, COUNT(*) as cnt FROM appointments WHERE doctor_id=? GROUP BY day ORDER BY cnt DESC LIMIT 3", [$this->doctor_id], "i")->fetch_all(MYSQLI_ASSOC);
         $busy_times = $this->db->select("SELECT HOUR(appointment_time) as hour, COUNT(*) as cnt FROM appointments WHERE doctor_id=? GROUP BY hour ORDER BY cnt DESC LIMIT 3", [$this->doctor_id], "i")->fetch_all(MYSQLI_ASSOC);
         
-        include 'views/doctor/statistics.php';
+        include ROOT_PATH . 'views/doctor/statistics.php';
     }
 
     public function followups() {
         $this->isLoggedIn();
         $followups = $this->consultModel->getFollowUps($this->doctor_id);
-        include 'views/doctor/followups.php';
+        include ROOT_PATH . 'views/doctor/followups.php';
     }
 
     public function messages() {
@@ -268,10 +272,10 @@ class DoctorController {
             $patient_user_id = $_GET['patient_id'];
             $this->messageModel->markAsRead($this->user_id, $patient_user_id);
             $messages = $this->messageModel->getMessages($this->user_id, $patient_user_id);
-            include 'views/doctor/message_detail.php';
+            include ROOT_PATH . 'views/doctor/message_detail.php';
         } else {
             $conversations = $this->messageModel->getConversations($this->user_id, $this->doctor_id);
-            include 'views/doctor/messages.php';
+            include ROOT_PATH . 'views/doctor/messages.php';
         }
     }
 

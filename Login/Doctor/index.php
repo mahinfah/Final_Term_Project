@@ -1,5 +1,6 @@
 <?php
 session_start();
+chdir(__DIR__);
 require_once 'config/database.php';
 require_once 'controllers/DoctorController.php';
 
