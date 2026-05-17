@@ -82,13 +82,15 @@ require_once '../CONTROLLER/dashboardLoad.php';
 			
 		</span>
 
-  <div class="box">
-    <h2>Search Patient</h2>
-
-    <input type="text" placeholder="Patient Name">
-    <input type="text" placeholder="Phone Number">
-    <button>Search</button>
-  </div>
+  <h2>Search Patient</h2>
+ 
+<a href="search_patient.php">
+    <button>Search Patients</button>
+</a>
+<a href="book_appointment.php">
+    <button>Book Appointment</button>
+</a>
+    
 
   <div class="box">
     <h2>Register New Patient</h2>
