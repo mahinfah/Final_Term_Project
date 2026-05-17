@@ -142,3 +142,66 @@ function activateReceptionist($conn, $id) {
             WHERE id = '$id' AND role = 'receptionist'";
     return mysqli_query($conn, $sql);
 }
+
+// ✅ Get all specializations
+function getAllSpecializations($conn) {
+    $sql    = "SELECT * FROM specializations";
+    $result = mysqli_query($conn, $sql);
+    $specializations = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+        $specializations[] = $row;
+    }
+    return $specializations;
+}
+
+// ✅ Get single specialization by id
+function getSpecializationById($conn, $id) {
+    $sql    = "SELECT * FROM specializations WHERE id = '$id'";
+    $result = mysqli_query($conn, $sql);
+    return mysqli_fetch_assoc($result);
+}
+
+// ✅ Add specialization
+function addSpecialization($conn, $name, $description) {
+    $sql = "INSERT INTO specializations (name, description)
+            VALUES ('$name', '$description')";
+    return mysqli_query($conn, $sql);
+}
+
+// ✅ Rename specialization
+function renameSpecialization($conn, $id, $name, $description) {
+    $sql = "UPDATE specializations 
+            SET name        = '$name',
+                description = '$description'
+            WHERE id = '$id'";
+    return mysqli_query($conn, $sql);
+}
+
+// ✅ Delete specialization
+function deleteSpecialization($conn, $id) {
+    $sql = "DELETE FROM specializations WHERE id = '$id'";
+    return mysqli_query($conn, $sql);
+}
+// ✅ Count total registered patients
+function countPatients($conn) {
+    $sql    = "SELECT COUNT(*) AS total FROM patients";
+    $result = mysqli_query($conn, $sql);
+    $row    = mysqli_fetch_assoc($result);
+    return $row['total'];
+}
+
+// ✅ Count total active doctors
+function countActiveDoctors($conn) {
+    $sql    = "SELECT COUNT(*) AS total FROM users WHERE role = 'doctor' AND is_active = 1";
+    $result = mysqli_query($conn, $sql);
+    $row    = mysqli_fetch_assoc($result);
+    return $row['total'];
+}
+
+// ✅ Count total pending billing
+function countPendingBilling($conn) {
+    $sql    = "SELECT COUNT(*) AS total FROM billing WHERE payment_status = 'pending'";
+    $result = mysqli_query($conn, $sql);
+    $row    = mysqli_fetch_assoc($result);
+    return $row['total'];
+}

@@ -18,15 +18,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $consultation_fee  = $_POST['consultation_fee'];
     $license_number    = $_POST['license_number'];
     $experience_years  = $_POST['experience_years'];
-    $photo_path        = ''; // ✅ always empty
-
-    // ✅ Check empty fields
+    $photo_path        = ''; 
+    
     if (empty($name) || empty($email) || empty($password) || empty($phone) || empty($license_number)) {
         $message = "error:Name, email, password, phone and license number are required";
 
     } else {
 
-        // ✅ Step 1 - Insert into users table
+    
         $userResult = registerDoctorUser($conn, $name, $email, $password, $phone);
 
         if ($userResult) {

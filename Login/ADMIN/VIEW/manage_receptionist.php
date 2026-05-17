@@ -3,6 +3,12 @@ session_start();
 
 
 
+if (!isset($_SESSION['email'])) {
+    header("Location: ../../index.php");
+    exit;
+}
+
+
 require_once '../CONTROLLER/receptionistLoad.php';
 
 $msgType = '';
