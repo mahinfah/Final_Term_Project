@@ -80,119 +80,61 @@ require_once '../CONTROLLER/dashboardLoad.php';
  <h2>Appointment List</h2>
   <span id="table">
 			
-		</span>
+		</span> 
+    <style>
+    .wrapper {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
 
-  <h2>Search Patient</h2>
- 
-<a href="search_patient.php">
-    <button>Search Patients</button>
-</a>
-<a href="book_appointment.php">
-    <button>Book Appointment</button>
-</a>
+    .container {
+        border: 1px solid #fafafa;
+        padding: 60px;
+        background-color: #a07a6f;
+        width: 200px;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 2px 2px 5px #f5e9e9;
+    }
+    h2 {
+        color: #110c0c;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="wrapper">
+
+    <div class="container">
+        <h2>Book Appointment</h2>
+        <a href="book_appointment.php">
+            <button>Book Appointment</button>
+        </a>
+    </div>
+
+    <div class="container">
+        <h2>Search Patients</h2>
+        <a href="search_patient.php">
+            <button>Search Patients</button>
+        </a>
+    </div>
+
+    <div class="container">
+        <h2>Make Payment</h2>
+        <a href="process_payment.php">
+            <button>Process Payment</button>
+        </a>
+    </div>
+    <div class="container">
+    <h2>Register Patient</h2>
+    <a href="register_patient.php">
+        <button>Register Patient</button>
+    </a>
+</div>
+
+</div>
     
-
-  <div class="box">
-    <h2>Register New Patient</h2>
-
-    <input type="text" placeholder="Full Name"><br>
-    <input type="text" placeholder="Phone"><br>
-    <input type="text" placeholder="Patient ID"><br>
-    <button>Register</button>
-  </div>
-
-  <!-- Book Appointment -->
-  <div class="box">
-    <h2>Book Appointment</h2>
-
-    <input type="text" placeholder="Patient Name">
-
-    <select>
-      <option>Select Doctor</option>
-      <option>Dr. Smith</option>
-      <option>Dr. Khan</option>
-    </select>
-
-    <input type="time">
-
-    <button>Book</button>
-  </div>
-
-  <!-- Check In -->
-  <div class="box">
-    <h2>Patient Check In</h2>
-
-    <input type="text" placeholder="Appointment ID">
-    <button>Check In</button>
-  </div>
-
-  <!-- Waiting Queue -->
-  <div class="box">
-    <h2>Waiting Queue</h2>
-
-    <ul>
-      <li>John - Dr. Smith</li>
-      <li>Sara - Dr. Khan</li>
-    </ul>
-  </div>
-
-  <!-- Payment -->
-  <div class="box">
-    <h2>Process Payment</h2>
-
-    <input type="text" placeholder="Appointment ID">
-    <input type="text" placeholder="Amount">
-
-    <select>
-      <option>Cash</option>
-      <option>Card</option>
-    </select>
-
-    <button>Paid</button>
-  </div>
-
-  <!-- Receipt -->
-  <div class="box">
-    <h2>Payment Receipt</h2>
-
-    <p>Patient: John</p>
-    <p>Amount: $100</p>
-    <p>Method: Cash</p>
-
-    <button onclick="window.print()">Print Receipt</button>
-  </div>
-
-  <!-- Doctor Availability -->
-  <div class="box">
-    <h2>Doctor Availability</h2>
-
-    <table>
-      <tr>
-        <th>Doctor</th>
-        <th>Available Time</th>
-      </tr>
-
-      <tr>
-        <td>Dr. Smith</td>
-        <td>2:00 PM</td>
-      </tr>
-
-      <tr>
-        <td>Dr. Khan</td>
-        <td>3:00 PM</td>
-      </tr>
-    </table>
-  </div>
-
-  <!-- Report -->
-  <div class="box">
-    <h2>Daily Summary Report</h2>
-
-    <p>Total Appointments: 20</p>
-    <p>Checked In: 12</p>
-    <p>Completed: 8</p>
-    <p>Revenue: $1200</p>
-  </div>
     <script src="./script/valid.js"></script>
 </body>
 </html>
