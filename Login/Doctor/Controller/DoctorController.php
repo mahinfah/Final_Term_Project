@@ -167,7 +167,6 @@ class DoctorController {
         header("Location: index.php?action=today_schedule");
     }
 
-    // AJAX endpoint
     public function checkinAjax() {
         $this->isLoggedIn();
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {

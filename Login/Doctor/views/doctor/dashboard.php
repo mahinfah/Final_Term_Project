@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
-<head><title>Dashboard</title><link rel="stylesheet" href="assets/css/style.css"></head>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
 <body>
 <div class="container">
     <h2>Doctor Dashboard</h2>
-    <p>Welcome, Dr. <?= htmlspecialchars($_SESSION['user_id']) ?></p>
     <ul>
         <li><a href="index.php?action=profile">Manage Profile</a></li>
         <li><a href="index.php?action=availability">Weekly Availability</a></li>
