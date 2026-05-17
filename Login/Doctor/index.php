@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once _DIR_ . '/models/User.php';
+require_once __DIR__ . '/models/User.php';
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'doctor') {
     header('Location: controllers/DoctorController.php');
@@ -48,5 +48,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
 }
 
 
-include _DIR_ . '/views/login.php';
+include __DIR__ . '/views/login.php';
 ?>

@@ -1,12 +1,12 @@
 <?php
 session_start();
-require_once _DIR_ . '/../models/User.php';
-require_once _DIR_ . '/../models/Doctor.php';
-require_once _DIR_ . '/../models/Appointment.php';
-require_once _DIR_ . '/../models/ConsultationNote.php';
-require_once _DIR_ . '/../models/Review.php';
-require_once _DIR_ . '/../models/Earning.php';
-require_once _DIR_ . '/../models/Message.php';
+require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../models/Doctor.php';
+require_once __DIR__ . '/../models/Appointment.php';
+require_once __DIR__ . '/../models/ConsultationNote.php';
+require_once __DIR__ . '/../models/Review.php';
+require_once __DIR__ . '/../models/Earning.php';
+require_once __DIR__ . '/../models/Message.php';
 
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] != 'doctor') {
     header('Location: ../index.php');

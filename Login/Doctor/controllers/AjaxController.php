@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once _DIR_ . '/../models/Appointment.php';
+require_once __DIR__ . '/../models/Appointment.php';
 
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] != 'doctor') {
     echo json_encode(['error' => 'Unauthorized']);
