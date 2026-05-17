@@ -1,11 +1,13 @@
 <?php
 require_once __DIR__ . '/../config/database.php';
+
 class Appointment {
     private $conn;
     public function __construct() {
         $database = new Database();
         $this->conn = $database->getConnection();
     }
+    
     public function getAvailableSlots($doctor_id, $date) {
         $day = date('l', strtotime($date));
         $stmt = $this->conn->prepare("SELECT start_time, end_time, slot_duration_minutes FROM doctor_availability WHERE doctor_id = ? AND day_of_week = ? AND is_available = 1");
@@ -35,10 +37,21 @@ class Appointment {
         }
         return $slots;
     }
+    
     public function book($patient_id, $doctor_id, $date, $time, $reason, $dependent_id = null) {
         $time24 = date('H:i:s', strtotime($time));
-        $stmt = $this->conn->prepare("INSERT INTO appointments (patient_id, doctor_id, dependent_id, appointment_date, appointment_time, reason, status, booked_by) VALUES (?, ?, ?, ?, ?, ?, 'pending', 'patient')");
-        $stmt->bind_param("iiisss", $patient_id, $doctor_id, $dependent_id, $date, $time24, $reason);
+        $sql = "INSERT INTO appointments (patient_id, doctor_id, dependent_id, appointment_date, appointment_time, reason, status, booked_by) VALUES (?, ?, ?, ?, ?, ?, 'pending', 'patient')";
+        $stmt = $this->conn->prepare($sql);
+        // If dependent_id is null, pass NULL directly
+        if ($dependent_id === null) {
+            $stmt->bind_param("iiisss", $patient_id, $doctor_id, $dependent_id, $date, $time24, $reason);
+        } else {
+            $stmt->bind_param("iiisss", $patient_id, $doctor_id, $dependent_id, $date, $time24, $reason);
+        }
+        // However, bind_param expects a variable reference. We'll use a temporary variable.
+        // Simpler: set a variable $dep = $dependent_id;
+        $dep = $dependent_id;
+        $stmt->bind_param("iiisss", $patient_id, $doctor_id, $dep, $date, $time24, $reason);
         if($stmt->execute()) {
             $app_id = $this->conn->insert_id;
             $fee = $this->conn->query("SELECT consultation_fee FROM doctors WHERE id = $doctor_id")->fetch_assoc()['consultation_fee'];
@@ -49,6 +62,7 @@ class Appointment {
         }
         return false;
     }
+    
     public function getUpcoming($patient_id) {
         $stmt = $this->conn->prepare("SELECT a.*, u.name as doctor_name FROM appointments a JOIN doctors d ON a.doctor_id = d.id JOIN users u ON d.user_id = u.id WHERE a.patient_id = ? AND a.appointment_date >= CURDATE() AND a.status NOT IN ('completed','cancelled') ORDER BY a.appointment_date, a.appointment_time");
         $stmt->bind_param("i", $patient_id);
@@ -58,8 +72,9 @@ class Appointment {
         while($row = $result->fetch_assoc()) $data[] = $row;
         return $data;
     }
+    
     public function getPast($patient_id) {
-        $stmt = $this->conn->prepare("SELECT a.*, u.name as doctor_name, (SELECT COUNT(*) FROM consultation_notes WHERE appointment_id = a.id) as has_notes FROM appointments a JOIN doctors d ON a.doctor_id = d.id JOIN users u ON d.user_id = u.id WHERE a.patient_id = ? AND (a.appointment_date < CURDATE() OR a.status = 'completed') ORDER BY a.appointment_date DESC");
+        $stmt = $this->conn->prepare("SELECT a.*, u.name as doctor_name, d.id as doctor_db_id, (SELECT COUNT(*) FROM consultation_notes WHERE appointment_id = a.id) as has_notes FROM appointments a JOIN doctors d ON a.doctor_id = d.id JOIN users u ON d.user_id = u.id WHERE a.patient_id = ? AND (a.appointment_date < CURDATE() OR a.status = 'completed') ORDER BY a.appointment_date DESC");
         $stmt->bind_param("i", $patient_id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -67,17 +82,20 @@ class Appointment {
         while($row = $result->fetch_assoc()) $data[] = $row;
         return $data;
     }
+    
     public function cancel($id, $patient_id) {
         $stmt = $this->conn->prepare("UPDATE appointments SET status = 'cancelled' WHERE id = ? AND patient_id = ? AND appointment_date > CURDATE()");
         $stmt->bind_param("ii", $id, $patient_id);
         return $stmt->execute();
     }
+    
     public function reschedule($id, $patient_id, $new_date, $new_time) {
         $time24 = date('H:i:s', strtotime($new_time));
         $stmt = $this->conn->prepare("UPDATE appointments SET appointment_date = ?, appointment_time = ?, status = 'pending' WHERE id = ? AND patient_id = ? AND appointment_date > CURDATE()");
         $stmt->bind_param("ssii", $new_date, $time24, $id, $patient_id);
         return $stmt->execute();
     }
+    
     public function getConsultationNotes($appointment_id, $patient_id) {
         $stmt = $this->conn->prepare("SELECT n.*, u.name as doctor_name FROM consultation_notes n JOIN doctors d ON n.doctor_id = d.id JOIN users u ON d.user_id = u.id WHERE n.appointment_id = ? AND n.patient_id = ?");
         $stmt->bind_param("ii", $appointment_id, $patient_id);

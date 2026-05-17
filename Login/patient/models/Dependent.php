@@ -12,14 +12,11 @@ class Dependent {
         return $stmt->execute();
     }
     public function getByPatient($patient_id) {
-        $stmt = $this->conn->prepare("SELECT * FROM dependents WHERE primary_patient_id = ?");
-        $stmt->bind_param("i", $patient_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $list = [];
-        while($row = $result->fetch_assoc()) $list[] = $row;
-        return $list;
-    }
+    $stmt = $this->conn->prepare("SELECT * FROM dependents WHERE primary_patient_id = ?");
+    $stmt->bind_param("i", $patient_id);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
     public function update($id, $patient_id, $name, $dob, $relationship, $blood_group) {
         $stmt = $this->conn->prepare("UPDATE dependents SET name=?, date_of_birth=?, relationship=?, blood_group=? WHERE id=? AND primary_patient_id=?");
         $stmt->bind_param("ssssii", $name, $dob, $relationship, $blood_group, $id, $patient_id);
