@@ -11,6 +11,12 @@ require_once '../CONTROLLER/dashboardLoad.php';
 <head>
   <title>Receptionist Dashboard</title>
 
+<div style="text-align: right; padding: 10px;">
+    <a href="logout.php">
+        <button>Logout</button>
+    </a>
+</div>
+
   <style>
     body{
       font-family: Arial;
