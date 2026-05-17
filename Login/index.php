@@ -28,6 +28,7 @@ if ($action === "login") {
 
         if ($result && $result->num_rows > 0) {
             $_SESSION['msg'] = "Login Successful";
+     
             header("Location: ADMIN/VIEW/admin_dashboard.php");
             exit;
         } else {

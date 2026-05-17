@@ -42,3 +42,42 @@ function appointmentLoad($conn){
 
     return $appointments;
 }
+
+// ✅ Get all specializations for dropdown
+function getSpecializations($conn) {
+    $sql = "SELECT id, name FROM specializations";
+    $result = mysqli_query($conn, $sql);
+    $specializations = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+        $specializations[] = $row;
+    }
+    return $specializations;
+}
+
+// ✅ Register doctor user account
+function registerDoctorUser($conn, $name, $email, $password, $phone) {
+
+    // ✅ Check if email already exists
+    $check  = "SELECT id FROM users WHERE email = '$email'";
+    $result = mysqli_query($conn, $check);
+
+    if (mysqli_num_rows($result) > 0) {
+        return false;
+    }
+
+    // ✅ Hash password
+    $hashed = password_hash($password, PASSWORD_DEFAULT);
+
+    $sql = "INSERT INTO users (name, email, password_hash, phone, role, is_active)
+            VALUES ('$name', '$email', '$hashed', '$phone', 'doctor', 1)";
+    return mysqli_query($conn, $sql);
+}
+
+// ✅ Register doctor profile
+function registerDoctor($conn, $user_id, $specialization_id, $bio, $consultation_fee, $photo_path, $license_number, $experience_years) {
+    $sql = "INSERT INTO doctors 
+                (user_id, specialization_id, bio, consultation_fee, photo_path, license_number, experience_years, is_approved)
+            VALUES 
+                ('$user_id', '$specialization_id', '$bio', '$consultation_fee', '$photo_path', '$license_number', '$experience_years', 0)";
+    return mysqli_query($conn, $sql);
+}
