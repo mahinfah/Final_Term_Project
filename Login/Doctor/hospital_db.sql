@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 15, 2026 at 05:26 PM
+-- Generation Time: May 17, 2026 at 10:40 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -36,6 +36,14 @@ CREATE TABLE `announcements` (
   `published_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `announcements`
+--
+
+INSERT INTO `announcements` (`id`, `author_id`, `title`, `body`, `target_role`, `published_at`) VALUES
+(1, 6, 'New Medical Equipment', 'We have acquired new ECG machines. Please attend training on Friday.', 'doctor', '2026-05-17 08:38:45'),
+(2, 6, 'Holiday Schedule', 'Hospital will be closed on Sunday. Emergency services available.', 'all', '2026-05-17 08:38:45');
+
 -- --------------------------------------------------------
 
 --
@@ -59,13 +67,17 @@ CREATE TABLE `appointments` (
 --
 
 INSERT INTO `appointments` (`id`, `patient_id`, `doctor_id`, `appointment_date`, `appointment_time`, `reason`, `status`, `booked_by`, `created_at`) VALUES
-(1, 1, 1, '2026-05-15', '10:00:00', 'Chest pain', 'pending', 'patient', '2026-05-15 15:25:54'),
-(2, 1, 1, '2026-05-15', '11:30:00', 'Routine checkup', 'confirmed', 'patient', '2026-05-15 15:25:54'),
-(3, 1, 1, '2026-05-15', '14:00:00', 'Follow-up', 'checked_in', 'patient', '2026-05-15 15:25:54'),
-(4, 1, 1, '2026-05-16', '09:30:00', 'Shortness of breath', 'completed', 'patient', '2026-05-15 15:25:54'),
-(5, 1, 1, '2026-05-17', '15:00:00', 'Palpitations', 'cancelled', 'patient', '2026-05-15 15:25:54'),
-(6, 1, 1, '2026-05-18', '12:00:00', 'Hypertension follow-up', 'no_show', 'patient', '2026-05-15 15:25:54'),
-(7, 1, 1, '2026-05-22', '10:30:00', 'ECG review', 'pending', 'patient', '2026-05-15 15:25:54');
+(1, 1, 1, '2026-05-07', '10:00:00', 'Chest pain check', 'completed', 'patient', '2026-05-02 08:38:45'),
+(2, 2, 2, '2026-05-09', '14:30:00', 'Skin rash', 'completed', 'patient', '2026-05-05 08:38:45'),
+(3, 3, 1, '2026-05-12', '11:00:00', 'High blood pressure follow-up', 'completed', 'patient', '2026-05-07 08:38:45'),
+(4, 1, 1, '2026-05-17', '09:30:00', 'ECG review', 'confirmed', 'patient', '2026-05-17 08:38:45'),
+(5, 2, 1, '2026-05-17', '11:00:00', 'Medication refill', 'pending', 'patient', '2026-05-17 08:38:45'),
+(6, 3, 2, '2026-05-17', '13:00:00', 'Acne treatment', 'checked_in', 'patient', '2026-05-17 08:38:45'),
+(7, 1, 1, '2026-05-19', '10:30:00', 'Follow-up', 'confirmed', 'patient', '2026-05-17 08:38:45'),
+(8, 2, 2, '2026-05-20', '15:00:00', 'Skin check', 'pending', 'patient', '2026-05-17 08:38:45'),
+(9, 3, 1, '2026-05-21', '09:00:00', 'Routine checkup', 'confirmed', 'patient', '2026-05-17 08:38:45'),
+(10, 2, 1, '2026-05-02', '14:00:00', 'Routine', 'cancelled', 'patient', '2026-04-27 08:38:45'),
+(11, 1, 2, '2026-05-05', '11:30:00', 'Follow-up', 'no_show', 'patient', '2026-05-02 08:38:45');
 
 -- --------------------------------------------------------
 
@@ -82,6 +94,18 @@ CREATE TABLE `billing` (
   `payment_status` enum('pending','paid') DEFAULT 'pending',
   `paid_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `billing`
+--
+
+INSERT INTO `billing` (`id`, `appointment_id`, `patient_id`, `amount`, `payment_method`, `payment_status`, `paid_at`) VALUES
+(1, 1, 1, 800.00, 'card', 'paid', '2026-05-17 08:38:45'),
+(2, 2, 2, 600.00, 'cash', 'paid', '2026-05-17 08:38:45'),
+(3, 3, 3, 800.00, 'online', 'pending', NULL),
+(4, 4, 1, 800.00, NULL, 'pending', NULL),
+(5, 5, 2, 800.00, NULL, 'pending', NULL),
+(6, 6, 3, 600.00, NULL, 'pending', NULL);
 
 -- --------------------------------------------------------
 
@@ -106,7 +130,9 @@ CREATE TABLE `consultation_notes` (
 --
 
 INSERT INTO `consultation_notes` (`id`, `appointment_id`, `doctor_id`, `patient_id`, `symptoms`, `diagnosis`, `prescription`, `follow_up_date`, `created_at`) VALUES
-(1, 4, 1, 1, 'Shortness of breath, fatigue', 'Mild hypertension', 'Lisinopril 10mg daily, low sodium diet', '2026-06-14', '2026-05-15 15:25:54');
+(1, 1, 1, 1, 'Chest discomfort, shortness of breath', 'Mild angina, stable condition', 'Nitroglycerin 0.4mg as needed. Low sodium diet. Regular exercise.', '2026-06-16', '2026-05-17 08:38:45'),
+(2, 2, 2, 2, 'Red itchy patches on arms and face', 'Contact dermatitis', 'Hydrocortisone cream 1% twice daily. Avoid irritants.', NULL, '2026-05-17 08:38:45'),
+(3, 3, 1, 3, 'Headaches, dizziness, BP 145/90', 'Stage 1 hypertension', 'Lisinopril 10mg daily. Reduce salt intake. Follow up in 2 weeks.', '2026-05-31', '2026-05-17 08:38:45');
 
 -- --------------------------------------------------------
 
@@ -122,6 +148,14 @@ CREATE TABLE `dependents` (
   `relationship` varchar(50) DEFAULT NULL,
   `blood_group` varchar(5) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `dependents`
+--
+
+INSERT INTO `dependents` (`id`, `primary_patient_id`, `name`, `date_of_birth`, `relationship`, `blood_group`) VALUES
+(1, 1, 'Emma Patient', '2015-08-20', 'Daughter', 'O+'),
+(2, 1, 'James Patient', '2018-11-10', 'Son', 'A-');
 
 -- --------------------------------------------------------
 
@@ -146,7 +180,8 @@ CREATE TABLE `doctors` (
 --
 
 INSERT INTO `doctors` (`id`, `user_id`, `specialization_id`, `bio`, `consultation_fee`, `photo_path`, `license_number`, `experience_years`, `is_approved`) VALUES
-(1, 2, 1, 'Experienced cardiologist with 15+ years of practice.', 800.00, NULL, 'LIC123', 15, 1);
+(1, 4, 1, 'Experienced cardiologist specializing in heart disease prevention and treatment.', 800.00, NULL, 'LIC123456', 15, 1),
+(2, 5, 2, 'Board-certified dermatologist with expertise in acne, eczema, and skin cancer screening.', 600.00, NULL, 'LIC789012', 10, 1);
 
 -- --------------------------------------------------------
 
@@ -173,7 +208,11 @@ INSERT INTO `doctor_availability` (`id`, `doctor_id`, `day_of_week`, `start_time
 (2, 1, 'Tuesday', '09:00:00', '17:00:00', 30, 1),
 (3, 1, 'Wednesday', '09:00:00', '17:00:00', 30, 1),
 (4, 1, 'Thursday', '09:00:00', '17:00:00', 30, 1),
-(5, 1, 'Friday', '09:00:00', '17:00:00', 30, 1);
+(5, 1, 'Friday', '09:00:00', '14:00:00', 30, 1),
+(6, 2, 'Monday', '10:00:00', '18:00:00', 45, 1),
+(7, 2, 'Tuesday', '10:00:00', '18:00:00', 45, 1),
+(8, 2, 'Wednesday', '10:00:00', '18:00:00', 45, 1),
+(9, 2, 'Thursday', '10:00:00', '18:00:00', 45, 1);
 
 -- --------------------------------------------------------
 
@@ -186,7 +225,7 @@ CREATE TABLE `doctor_reviews` (
   `appointment_id` int(11) NOT NULL,
   `patient_id` int(11) NOT NULL,
   `doctor_id` int(11) NOT NULL,
-  `rating` int(11) DEFAULT NULL CHECK (`rating` between 1 and 5),
+  `rating` int(11) DEFAULT NULL CHECK (`rating` >= 1 and `rating` <= 5),
   `review_text` text DEFAULT NULL,
   `reply` text DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
@@ -197,7 +236,9 @@ CREATE TABLE `doctor_reviews` (
 --
 
 INSERT INTO `doctor_reviews` (`id`, `appointment_id`, `patient_id`, `doctor_id`, `rating`, `review_text`, `reply`, `created_at`) VALUES
-(1, 4, 1, 1, 5, 'Very thorough and caring doctor. Explained everything clearly.', NULL, '2026-05-15 15:25:54');
+(1, 1, 1, 1, 5, 'Excellent doctor! Very thorough and caring. Explained everything clearly.', 'Thank you for your kind words! I\'m glad to help.', '2026-05-17 08:38:45'),
+(2, 2, 2, 2, 4, 'Good experience, but waiting time was a bit long.', 'We apologize for the wait. Thank you for your feedback.', '2026-05-17 08:38:45'),
+(3, 3, 3, 1, 5, 'Dr. Smith helped me manage my BP effectively. Highly recommended.', NULL, '2026-05-17 08:38:45');
 
 -- --------------------------------------------------------
 
@@ -217,7 +258,9 @@ CREATE TABLE `leave_dates` (
 --
 
 INSERT INTO `leave_dates` (`id`, `doctor_id`, `leave_date`, `reason`) VALUES
-(1, 1, '2026-05-20', 'Conference');
+(1, 1, '2026-05-27', 'Annual Conference'),
+(2, 1, '2026-06-11', 'Vacation'),
+(3, 2, '2026-05-22', 'Personal Leave');
 
 -- --------------------------------------------------------
 
@@ -240,8 +283,12 @@ CREATE TABLE `messages` (
 --
 
 INSERT INTO `messages` (`id`, `sender_id`, `receiver_id`, `appointment_id`, `message`, `is_read`, `created_at`) VALUES
-(1, 1, 2, 1, 'Doctor, I have a question about my medication. Can you advise?', 0, '2026-05-15 15:25:54'),
-(2, 2, 1, 1, 'Please schedule a follow-up appointment to discuss your medication in detail.', 0, '2026-05-15 15:25:54');
+(1, 1, 4, 1, 'Doctor, I have a question about my medication. Can you advise?', 0, '2026-05-15 08:38:45'),
+(2, 4, 1, 1, 'Please schedule a follow-up appointment to discuss your medication in detail.', 0, '2026-05-16 08:38:45'),
+(3, 2, 5, 2, 'The cream you prescribed is helping a lot. Thank you!', 1, '2026-05-14 08:38:45'),
+(4, 5, 2, 2, 'Glad to hear that! Continue using it for another week.', 0, '2026-05-15 08:38:45'),
+(5, 3, 4, 3, 'My BP readings are improving. Should I continue the same dose?', 0, '2026-05-17 08:38:45'),
+(6, 4, 3, 3, 'Yes, continue with 10mg. I will check again in your next visit.', 0, '2026-05-17 08:38:45');
 
 -- --------------------------------------------------------
 
@@ -266,7 +313,9 @@ CREATE TABLE `patients` (
 --
 
 INSERT INTO `patients` (`id`, `user_id`, `date_of_birth`, `blood_group`, `gender`, `address`, `emergency_contact_name`, `emergency_contact_phone`, `medical_history_notes`) VALUES
-(1, 1, '1990-05-15', 'O+', 'Male', '123 Main St, Dhaka', 'Mary Patient', '01711111112', NULL);
+(1, 1, '1985-06-15', 'O+', 'Male', '123 Main St, Dhaka', 'Mary Patient', '01711111112', 'Hypertension, no allergies'),
+(2, 2, '1990-03-22', 'A-', 'Female', '456 Park Ave, Dhaka', 'John Doe', '01722222223', 'Asthma'),
+(3, 3, '1978-11-05', 'B+', 'Male', '789 Lake Rd, Dhaka', 'Lisa Wilson', '01733333334', 'Diabetic type 2');
 
 -- --------------------------------------------------------
 
@@ -285,8 +334,11 @@ CREATE TABLE `specializations` (
 --
 
 INSERT INTO `specializations` (`id`, `name`, `description`) VALUES
-(1, 'Cardiology', 'Heart specialists'),
-(2, 'Dermatology', 'Skin specialists');
+(1, 'Cardiology', 'Heart and cardiovascular system'),
+(2, 'Dermatology', 'Skin, hair, and nails'),
+(3, 'Neurology', 'Brain and nervous system'),
+(4, 'Pediatrics', 'Child healthcare'),
+(5, 'Orthopedics', 'Bones and joints');
 
 -- --------------------------------------------------------
 
@@ -311,8 +363,13 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password_hash`, `phone`, `role`, `profile_pic`, `is_active`, `created_at`) VALUES
-(1, 'John Patient', 'patient@test.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '01711111111', 'patient', NULL, 1, '2026-05-15 15:25:53'),
-(2, 'Dr. John Smith', 'doctor@test.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '01722222222', 'doctor', NULL, 1, '2026-05-15 15:25:53');
+(1, 'John Patient', 'patient1@test.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '01711111111', 'patient', NULL, 1, '2026-05-17 08:38:45'),
+(2, 'Sarah Patient', 'patient2@test.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '01722222222', 'patient', NULL, 1, '2026-05-17 08:38:45'),
+(3, 'Mike Patient', 'patient3@test.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '01733333333', 'patient', NULL, 1, '2026-05-17 08:38:45'),
+(4, 'Dr. John Smith', 'doctor1@test.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '01744444444', 'doctor', NULL, 1, '2026-05-17 08:38:45'),
+(5, 'Dr. Sarah Ahmed', 'doctor2@test.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '01755555555', 'doctor', NULL, 1, '2026-05-17 08:38:45'),
+(6, 'Admin User', 'admin@test.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '01766666666', 'admin', NULL, 1, '2026-05-17 08:38:45'),
+(7, 'Receptionist', 'reception@test.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '01777777777', 'receptionist', NULL, 1, '2026-05-17 08:38:45');
 
 --
 -- Indexes for dumped tables
@@ -425,79 +482,79 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `announcements`
 --
 ALTER TABLE `announcements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `appointments`
 --
 ALTER TABLE `appointments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `billing`
 --
 ALTER TABLE `billing`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `consultation_notes`
 --
 ALTER TABLE `consultation_notes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `dependents`
 --
 ALTER TABLE `dependents`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `doctors`
 --
 ALTER TABLE `doctors`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `doctor_availability`
 --
 ALTER TABLE `doctor_availability`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `doctor_reviews`
 --
 ALTER TABLE `doctor_reviews`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `leave_dates`
 --
 ALTER TABLE `leave_dates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `specializations`
 --
 ALTER TABLE `specializations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- Constraints for dumped tables
@@ -527,7 +584,7 @@ ALTER TABLE `billing`
 -- Constraints for table `consultation_notes`
 --
 ALTER TABLE `consultation_notes`
-  ADD CONSTRAINT `consultation_notes_ibfk_1` FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`id`),
+  ADD CONSTRAINT `consultation_notes_ibfk_1` FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `consultation_notes_ibfk_2` FOREIGN KEY (`doctor_id`) REFERENCES `doctors` (`id`),
   ADD CONSTRAINT `consultation_notes_ibfk_3` FOREIGN KEY (`patient_id`) REFERENCES `patients` (`id`);
 
@@ -541,7 +598,7 @@ ALTER TABLE `dependents`
 -- Constraints for table `doctors`
 --
 ALTER TABLE `doctors`
-  ADD CONSTRAINT `doctors_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `doctors_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `doctors_ibfk_2` FOREIGN KEY (`specialization_id`) REFERENCES `specializations` (`id`);
 
 --
@@ -570,7 +627,7 @@ ALTER TABLE `leave_dates`
 ALTER TABLE `messages`
   ADD CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `messages_ibfk_3` FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`id`);
+  ADD CONSTRAINT `messages_ibfk_3` FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `patients`
