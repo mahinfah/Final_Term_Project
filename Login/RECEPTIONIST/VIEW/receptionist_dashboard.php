@@ -1,3 +1,11 @@
+
+
+<?php
+session_start(); 
+require_once '../CONTROLLER/dashboardLoad.php';
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,41 +69,19 @@
   <h1>Hospital Receptionist Dashboard</h1>
 
   <!-- Login/Profile -->
-  <div class="box">
+ <div class="box">
     <h2>Receptionist Profile</h2>
-    <p>Name: Receptionist</p>
-    <p>Email: reception@hospital.com</p>
-  </div>
+  
+    <p>Name: <?php echo $profile['name']; ?></p>
+    <p>Email: <?php echo $profile['email']; ?></p>
+</div>
 
-  <!-- Appointment Schedule -->
-  <div class="box">
-    <h2>Today's Appointments</h2>
 
-    <table>
-      <tr>
-        <th>Doctor</th>
-        <th>Patient</th>
-        <th>Time</th>
-        <th>Status</th>
-      </tr>
+ <h2>Appointment List</h2>
+  <span id="table">
+			
+		</span>
 
-      <tr>
-        <td>Dr. Smith</td>
-        <td>John</td>
-        <td>10:00 AM</td>
-        <td class="status">Checked In</td>
-      </tr>
-
-      <tr>
-        <td>Dr. Khan</td>
-        <td>Sara</td>
-        <td>11:00 AM</td>
-        <td>Pending</td>
-      </tr>S
-    </table>
-  </div>
-
-  <!-- Search Patient -->
   <div class="box">
     <h2>Search Patient</h2>
 
@@ -104,7 +90,6 @@
     <button>Search</button>
   </div>
 
-  <!-- Register Patient -->
   <div class="box">
     <h2>Register New Patient</h2>
 
@@ -206,6 +191,6 @@
     <p>Completed: 8</p>
     <p>Revenue: $1200</p>
   </div>
-
+    <script src="./script/valid.js"></script>
 </body>
 </html>
