@@ -90,13 +90,24 @@ require_once '../CONTROLLER/total_app.php';
    
     </div>
 
-    <div>   
+    
 <div type="container" class="container">
     <a href="add_doctor.php">
     <button class="B">Add Doctor</button>
 </a>
 
 </div>
+
+
+
+<div type="container" class="container">
+ <a href="manage_receptionist.php">
+    <button class="B">Manage Receptionists</button>
+</a>
+
+</div>
+
+
 
 
     </div>

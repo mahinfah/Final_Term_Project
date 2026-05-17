@@ -81,3 +81,64 @@ function registerDoctor($conn, $user_id, $specialization_id, $bio, $consultation
                 ('$user_id', '$specialization_id', '$bio', '$consultation_fee', '$photo_path', '$license_number', '$experience_years', 0)";
     return mysqli_query($conn, $sql);
 }
+
+// ✅ Get all receptionists
+function getAllReceptionists($conn) {
+    $sql = "SELECT * FROM users WHERE role = 'receptionist'";
+    $result = mysqli_query($conn, $sql);
+    $receptionists = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+        $receptionists[] = $row;
+    }
+    return $receptionists;
+}
+
+// ✅ Get single receptionist by id
+function getReceptionistById($conn, $id) {
+    $sql    = "SELECT * FROM users WHERE id = '$id' AND role = 'receptionist'";
+    $result = mysqli_query($conn, $sql);
+    return mysqli_fetch_assoc($result);
+}
+
+// ✅ Create receptionist
+function createReceptionist($conn, $name, $email, $password, $phone) {
+
+    // ✅ Check email exists
+    $check  = "SELECT id FROM users WHERE email = '$email'";
+    $result = mysqli_query($conn, $check);
+
+    if (mysqli_num_rows($result) > 0) {
+        return false;
+    }
+
+    $hashed = password_hash($password, PASSWORD_DEFAULT);
+    $sql    = "INSERT INTO users (name, email, password_hash, phone, role, is_active)
+               VALUES ('$name', '$email', '$hashed', '$phone', 'receptionist', 1)";
+    return mysqli_query($conn, $sql);
+}
+
+// ✅ Edit receptionist
+function editReceptionist($conn, $id, $name, $email, $phone) {
+    $sql = "UPDATE users 
+            SET name  = '$name',
+                email = '$email',
+                phone = '$phone'
+            WHERE id = '$id' AND role = 'receptionist'";
+    return mysqli_query($conn, $sql);
+}
+
+// ✅ Deactivate receptionist
+function deactivateReceptionist($conn, $id) {
+    $sql = "UPDATE users 
+            SET is_active = 0
+            WHERE id = '$id' AND role = 'receptionist'";
+    return mysqli_query($conn, $sql);
+}
+
+// ✅ Activate receptionist
+function activateReceptionist($conn, $id) {
+    $sql = "UPDATE users 
+            SET is_active = 1
+            WHERE id = '$id' AND role = 'receptionist'";
+    return mysqli_query($conn, $sql);
+}
