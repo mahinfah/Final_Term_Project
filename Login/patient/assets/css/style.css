@@ -1,7 +1,7 @@
-
+/* Global styles */
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f4f4f4;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f2f5;
     margin: 0;
     padding: 20px;
 }
@@ -11,116 +11,178 @@ body {
     margin: auto;
     background: white;
     padding: 20px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 /* Navigation bar */
 .nav {
-    background: #333;
-    padding: 10px;
+    background: #2c3e50;
+    padding: 12px;
     margin-bottom: 20px;
-    border-radius: 5px;
+    border-radius: 6px;
 }
-
 .nav a {
     color: white;
     text-decoration: none;
-    margin-right: 15px;
-    padding: 5px 8px;
+    margin-right: 18px;
+    padding: 6px 10px;
+    display: inline-block;
 }
-
 .nav a:hover {
-    background: #555;
-    border-radius: 3px;
-}
-
-/* Headings */
-h2, h3 {
-    color: #333;
+    background: #34495e;
+    border-radius: 4px;
 }
 
 /* Forms */
-form {
-    margin-bottom: 20px;
-}
-
-label {
-    font-weight: bold;
-    display: inline-block;
-    width: 180px;
-    margin-bottom: 5px;
-}
-
 input, select, textarea {
-    padding: 6px;
+    padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 3px;
-    width: 250px;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
     margin-bottom: 10px;
 }
-
 button, input[type="submit"] {
-    background: #007BFF;
+    background: #3498db;
     color: white;
     border: none;
-    padding: 8px 15px;
+    padding: 8px 16px;
     cursor: pointer;
-    border-radius: 3px;
+    border-radius: 4px;
     font-size: 14px;
 }
-
 button:hover, input[type="submit"]:hover {
-    background: #0056b3;
-}
-
-/* Tables */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-th {
-    background: #f2f2f2;
+    background: #2980b9;
 }
 
 /* Messages */
 .success {
-    color: green;
-    background: #e6ffe6;
-    padding: 8px;
-    border: 1px solid green;
-    border-radius: 3px;
+    color: #155724;
+    background: #d4edda;
+    padding: 10px;
+    border-radius: 4px;
     margin: 10px 0;
 }
-
 .error {
-    color: red;
-    background: #ffe6e6;
-    padding: 8px;
-    border: 1px solid red;
-    border-radius: 3px;
+    color: #721c24;
+    background: #f8d7da;
+    padding: 10px;
+    border-radius: 4px;
     margin: 10px 0;
 }
 
-/* Links */
-a {
-    color: #007BFF;
-    text-decoration: none;
+/* Tables */
+.table, table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+.table th, .table td,
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+.table th, table th {
+    background: #f2f2f2;
 }
 
+/* Login / Register containers */
+.login-container, .register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f0f2f5;
+}
+.login-box, .register-box {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+.login-box h2, .register-box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Form groups for login/register */
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Status badges */
+.status-pending {
+    background: #ffc107;
+    color: #856404;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    display: inline-block;
+}
+.status-confirmed {
+    background: #28a745;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    display: inline-block;
+}
+.status-checked_in {
+    background: #17a2b8;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    display: inline-block;
+}
+.status-completed {
+    background: #6c757d;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    display: inline-block;
+}
+.status-cancelled {
+    background: #dc3545;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    display: inline-block;
+}
+.status-no_show {
+    background: #343a40;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    display: inline-block;
+}
+
+/* Rating stars */
+.rating {
+    color: gold;
+    font-weight: bold;
+}
+
+/* Misc */
+a {
+    text-decoration: none;
+    color: #3498db;
+}
 a:hover {
     text-decoration: underline;
 }
-
-/* Utility */
 hr {
     margin: 20px 0;
 }
