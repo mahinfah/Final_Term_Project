@@ -1,52 +1,60 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Today's Schedule</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <script>
-        function checkin(appointment_id) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "index.php?action=checkin_ajax", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function() {
-                if(this.readyState == 4 && this.status == 200) {
-                    var res = JSON.parse(this.responseText);
-                    if(res.success) location.reload();
-                    else alert("Check-in failed");
-                }
-            }
-            xhr.send("appointment_id=" + appointment_id);
-        }
-    </script>
-</head>
-<body>
-<div class="container">
-    <h2>Today's Appointments</h2>
-    <table border="1">
-        <tr><th>Time</th><th>Patient</th><th>Reason</th><th>Status</th><th>Actions</th></tr>
-        <?php foreach($appointments as $apt): ?>
-        <tr>
-            <td><?= $apt['appointment_time'] ?></td>
-            <td><a href="index.php?action=patient_notes&patient_id=<?= $apt['patient_user_id'] ?>"><?= htmlspecialchars($apt['patient_name']) ?></a></td>
-            <td><?= htmlspecialchars($apt['reason']) ?></td>
-            <td><?= $apt['status'] ?></td>
-            <td>
-                <?php if($apt['status'] == 'pending'): ?>
-                    <a href="index.php?action=confirm_appointment&id=<?= $apt['id'] ?>">Confirm</a> |
-                    <a href="index.php?action=reject_appointment&id=<?= $apt['id'] ?>">Reject</a>
-                <?php elseif($apt['status'] == 'confirmed'): ?>
-                    <button onclick="checkin(<?= $apt['id'] ?>)">Check In (AJAX)</button>
-                <?php elseif($apt['status'] == 'checked_in'): ?>
-                    <a href="index.php?action=add_consultation&id=<?= $apt['id'] ?>">Complete & Add Notes</a>
-                <?php endif; ?>
-                <?php if($apt['status'] != 'cancelled' && $apt['status'] != 'completed' && $apt['status'] != 'checked_in'): ?>
-                    <a href="index.php?action=no_show_appointment&id=<?= $apt['id'] ?>">No-Show</a>
-                <?php endif; ?>
-            </td>
-        </tr>
-        <?php endforeach; ?>
+<?php
+$today_apps = $appointmentModel->getTodaySchedule($doctor_data['id']);
+?>
+<h2>Today's Schedule (<?php echo date('F j, Y'); ?>)</h2>
+<?php if (count($today_apps) > 0): ?>
+    <table class="table">
+        <thead>
+            <tr><th>Time</th><th>Patient</th><th>Reason</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            <?php foreach ($today_apps as $app): ?>
+                <tr>
+                    <td><?php echo date('h:i A', strtotime($app['appointment_time'])); ?></td>
+                    <td><?php echo htmlspecialchars($app['patient_name']); ?></td>
+                    <td><?php echo htmlspecialchars($app['reason']); ?></td>
+                    <td><span class="status-<?php echo $app['status']; ?>"><?php echo ucfirst($app['status']); ?></span></td>
+                    <td>
+                        <?php if ($app['status'] === 'pending'): ?>
+                            <a href="?page=pending_requests&action=confirm&id=<?php echo $app['id']; ?>">Confirm</a>
+                        <?php elseif ($app['status'] === 'confirmed'): ?>
+                            <button class="checkin-btn" data-id="<?php echo $app['id']; ?>">Check In</button>
+                        <?php elseif ($app['status'] === 'checked_in'): ?>
+                            <a href="?page=consultation_notes&appointment_id=<?php echo $app['id']; ?>">Add Notes</a>
+                        <?php elseif ($app['status'] === 'completed'): ?>
+                            Completed
+                        <?php elseif ($app['status'] === 'cancelled'): ?>
+                            Cancelled
+                        <?php elseif ($app['status'] === 'no_show'): ?>
+                            No-Show
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
     </table>
-    <a href="index.php?action=dashboard">Back</a>
-</div>
-</body>
-</html>
+<?php else: ?>
+    <p>No appointments for today.</p>
+<?php endif; ?>
+
+<script>
+document.querySelectorAll('.checkin-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        let id = this.dataset.id;
+        fetch('../controllers/AjaxController.php?action=check_in&id=' + id)
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) location.reload();
+                else alert('Error checking in.');
+            });
+    });
+});
+</script>
+<style>
+.status-pending { color: orange; }
+.status-confirmed { color: green; }
+.status-checked_in { color: blue; }
+.status-completed { color: darkgreen; }
+.status-cancelled { color: red; }
+.status-no_show { color: gray; }
+</style>

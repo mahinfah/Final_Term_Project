@@ -1,30 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Leave Dates</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-<div class="container">
-    <h2>Mark Unavailable Dates</h2>
-    <?php if(isset($success)) echo "<p class='success'>$success</p>"; ?>
-    <form method="post">
-        <input type="date" name="leave_date" required>
-        <input type="text" name="reason" placeholder="Reason" required>
-        <button type="submit" name="add_leave">Add Leave</button>
-    </form>
-    <h3>Existing Leave Dates</h3>
-    <table border="1">
-        <tr><th>Date</th><th>Reason</th><th>Action</th></tr>
-        <?php foreach($leaves as $leave): ?>
-        <tr>
-            <td><?= $leave['leave_date'] ?></td>
-            <td><?= htmlspecialchars($leave['reason']) ?></td>
-            <td><a href="?action=leave_dates&delete=<?= $leave['id'] ?>" onclick="return confirm('Delete?')">Remove</a></td>
-        </tr>
+<?php
+$leaves = $doctorModel->getLeaveDates($doctor_data['id']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['add_leave'])) {
+        $doctorModel->addLeaveDate($doctor_data['id'], $_POST['leave_date'], $_POST['reason']);
+        echo '<p class="success">Leave date added.</p>';
+    } elseif (isset($_POST['remove_leave'])) {
+        $doctorModel->removeLeaveDate($_POST['leave_id'], $doctor_data['id']);
+        echo '<p class="success">Leave removed.</p>';
+    }
+    // Refresh
+    $leaves = $doctorModel->getLeaveDates($doctor_data['id']);
+}
+?>
+<h2>Leave / Unavailable Dates</h2>
+<form method="post">
+    <label>Leave Date:</label> <input type="date" name="leave_date" required>
+    <label>Reason (optional):</label> <input type="text" name="reason">
+    <button type="submit" name="add_leave">Add Leave</button>
+</form>
+<h3>Current Leaves</h3>
+<?php if (count($leaves) > 0): ?>
+    <ul>
+        <?php foreach ($leaves as $leave): ?>
+            <li><?php echo $leave['leave_date']; ?> - <?php echo htmlspecialchars($leave['reason'] ?: 'No reason'); ?>
+                <form method="post" style="display:inline;">
+                    <input type="hidden" name="leave_id" value="<?php echo $leave['id']; ?>">
+                    <button type="submit" name="remove_leave">Remove</button>
+                </form>
+            </li>
         <?php endforeach; ?>
-    </table>
-    <a href="index.php?action=dashboard">Back</a>
-</div>
-</body>
-</html>
+    </ul>
+<?php else: ?>
+    <p>No leave dates set.</p>
+<?php endif; ?>
