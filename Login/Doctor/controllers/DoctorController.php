@@ -8,10 +8,17 @@ require_once __DIR__ . '/../models/Review.php';
 require_once __DIR__ . '/../models/Earning.php';
 require_once __DIR__ . '/../models/Message.php';
 
-if(!isset($_SESSION['user_id']) || $_SESSION['role'] != 'doctor') {
-    header('Location: ../index.php');
+
+$script_name = $_SERVER['SCRIPT_NAME'];
+$base_dir = dirname(dirname($script_name));  
+$base_url = 'http://' . $_SERVER['HTTP_HOST'] . $base_dir;
+
+
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'doctor') {
+    header('Location: ' . $base_url . '/index.php');
     exit;
 }
+
 
 $user = new User();
 $doctorModel = new Doctor();
@@ -31,7 +38,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
 <html>
 <head>
     <title>Doctor Panel</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="<?php echo $base_url; ?>/assets/css/style.css">
 </head>
 <body>
 <div class="container">
@@ -49,25 +56,25 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
         <a href="?page=earnings">Earnings</a>
         <a href="?page=statistics">Statistics</a>
         <a href="?page=messages">Messages</a>
-        <a href="../logout.php">Logout</a>
+        <a href="<?php echo $base_url; ?>/logout.php">Logout</a>
     </div>
     <div class="content">
         <?php
         switch($page) {
-            case 'dashboard': include '../views/doctor/dashboard.php'; break;
-            case 'profile': include '../views/doctor/profile.php'; break;
-            case 'availability': include '../views/doctor/availability.php'; break;
-            case 'leave_dates': include '../views/doctor/leave_dates.php'; break;
-            case 'today_schedule': include '../views/doctor/today_schedule.php'; break;
-            case 'weekly_calendar': include '../views/doctor/weekly_calendar.php'; break;
-            case 'pending_requests': include '../views/doctor/pending_requests.php'; break;
-            case 'consultation_notes': include '../views/doctor/consultation_notes.php'; break;
-            case 'patient_notes': include '../views/doctor/patient_notes.php'; break;
-            case 'reviews': include '../views/doctor/reviews.php'; break;
-            case 'earnings': include '../views/doctor/earnings.php'; break;
-            case 'statistics': include '../views/doctor/statistics.php'; break;
-            case 'messages': include '../views/doctor/messages.php'; break;
-            default: include '../views/doctor/dashboard.php';
+            case 'dashboard': include __DIR__ . '/../views/doctor/dashboard.php'; break;
+            case 'profile': include __DIR__ . '/../views/doctor/profile.php'; break;
+            case 'availability': include __DIR__ . '/../views/doctor/availability.php'; break;
+            case 'leave_dates': include __DIR__ . '/../views/doctor/leave_dates.php'; break;
+            case 'today_schedule': include __DIR__ . '/../views/doctor/today_schedule.php'; break;
+            case 'weekly_calendar': include __DIR__ . '/../views/doctor/weekly_calendar.php'; break;
+            case 'pending_requests': include __DIR__ . '/../views/doctor/pending_requests.php'; break;
+            case 'consultation_notes': include __DIR__ . '/../views/doctor/consultation_note.php'; break;
+            case 'patient_notes': include __DIR__ . '/../views/doctor/patient_notes.php'; break;
+            case 'reviews': include __DIR__ . '/../views/doctor/reviews.php'; break;
+            case 'earnings': include __DIR__ . '/../views/doctor/earnings.php'; break;
+            case 'statistics': include __DIR__ . '/../views/doctor/statistics.php'; break;
+            case 'messages': include __DIR__ . '/../views/doctor/messages.php'; break;
+            default: include __DIR__ . '/../views/doctor/dashboard.php';
         }
         ?>
     </div>
