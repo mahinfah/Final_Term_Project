@@ -1,7 +1,13 @@
 
 
 <?php
-session_start(); 
+session_start();
+
+if (!isset($_SESSION['email']) || ($_SESSION['role'] ?? '') !== 'receptionist') {
+    header("Location: ../../index.php");
+    exit;
+}
+
 require_once '../CONTROLLER/dashboardLoad.php';
 
 ?>

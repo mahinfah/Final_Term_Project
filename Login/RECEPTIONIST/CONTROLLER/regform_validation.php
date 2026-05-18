@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-require_once '../MODEL/db_Connection.php';
+require_once '../MODEL/db_connection.php';
 require_once '../MODEL/db_manupulation.php';
-require_once '../MODEL/db_Close.php';
+require_once '../MODEL/db_close.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -51,14 +51,15 @@ if ($action === "login") {
             if ($action === "insert") {
 
                 try {
+                    $password_hash = password_hash($password, PASSWORD_DEFAULT);
                     $result = insert_on_DB(
                         $name,
                         $email,
-                        $password,
+                        $password_hash,
                         $phone,
                         $role,
-                        $is_active,
                         $profilePicPath,
+                        $is_active,
                         $conn
                     );
 
