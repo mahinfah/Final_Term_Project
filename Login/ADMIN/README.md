@@ -18,4 +18,3 @@ Features
 •	Set global appointment policies: minimum cancellation notice period (hours), maximum advance booking window (days), default consultation fee
 •	View and manage the billing dashboard: total paid, total pending, and overdue bills
 •	Export any report as a printable HTML table
-________________________________________
