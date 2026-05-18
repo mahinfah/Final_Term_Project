@@ -2,21 +2,25 @@
 session_start();
 require_once __DIR__ . '/models/User.php';
 
+$scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
+$loginRoot = preg_replace('#/patient$#i', '', $scriptDir);
+$doctorLoginPath = $loginRoot . '/Doctor/index.php';
+$error = '';
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
     switch ($_SESSION['role']) {
         case 'patient':
             header('Location: controllers/PatientController.php');
             exit;
-        case 'admin':
-            header('Location: admin.php');
-            exit;
         case 'doctor':
-            header('Location: doctor.php');
+            header('Location: ' . $doctorLoginPath);
             exit;
+        case 'admin':
         case 'receptionist':
-            header('Location: receptionist.php');
-            exit;
+            $roleName = ucfirst($_SESSION['role']);
+            session_destroy();
+            $error = $roleName . ' dashboard is not available in this project.';
+            break;
         default:
             session_destroy();
             header('Location: index.php');
@@ -25,9 +29,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
 }
 
 
-$error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
-    $role = $_POST['role'] ?? '';
+    $role = strtolower(trim($_POST['role'] ?? ''));
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
 
@@ -36,25 +39,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     } else {
         $user = new User();
         $loggedInUser = $user->login($email, $password);
+        $userRole = strtolower(trim($loggedInUser['role'] ?? ''));
 
-        if ($loggedInUser && $loggedInUser['role'] === $role && $loggedInUser['is_active'] == 1) {
-            $_SESSION['user_id'] = $loggedInUser['id'];
-            $_SESSION['role'] = $loggedInUser['role'];
-            $_SESSION['username'] = $loggedInUser['name'];
-
+        if ($loggedInUser && $userRole === $role && $loggedInUser['is_active'] == 1) {
             switch ($role) {
                 case 'patient':
+                    $_SESSION['user_id'] = $loggedInUser['id'];
+                    $_SESSION['role'] = $userRole;
+                    $_SESSION['username'] = $loggedInUser['name'];
                     header('Location: controllers/PatientController.php');
                     exit;
-                case 'admin':
-                    header('Location: admin.php');
-                    exit;
                 case 'doctor':
-                    header('Location: doctor.php');
+                    $_SESSION['user_id'] = $loggedInUser['id'];
+                    $_SESSION['role'] = $userRole;
+                    $_SESSION['username'] = $loggedInUser['name'];
+                    header('Location: ' . $doctorLoginPath);
                     exit;
+                case 'admin':
                 case 'receptionist':
-                    header('Location: receptionist.php');
-                    exit;
+                    $error = ucfirst($role) . ' dashboard is not available in this project.';
+                    break;
                 default:
                     $error = 'Invalid role selected.';
             }
