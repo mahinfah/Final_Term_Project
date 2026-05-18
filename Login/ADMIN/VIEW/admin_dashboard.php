@@ -60,7 +60,7 @@ require_once '../CONTROLLER/dashboardLoad.php';
         margin-top: 20px;
         background-color: #b6eafa;
         border-radius: 8px;
-        padding: 12px;
+        padding: 6px;
         box-shadow: 0 2px 8px rgba(16, 125, 125, 0.89);
     }
 
@@ -78,6 +78,10 @@ require_once '../CONTROLLER/dashboardLoad.php';
         gap: 20px;
         flex-wrap: wrap;
         margin-top: 20px;
+    }
+
+    .down {
+        flex-basis: 100%;
     }
 </style>
 
@@ -142,6 +146,7 @@ require_once '../CONTROLLER/dashboardLoad.php';
             </a>
         </div>
 
+        <div class="down"></div>
         <div class="container">
             <a href="total_revenue.php">
                 <button class="B">Total Revenue</button>
@@ -149,6 +154,12 @@ require_once '../CONTROLLER/dashboardLoad.php';
         </div>
 
     </div>
+
+<div class="container">
+    <a href="complaints.php">
+        <button class="B">Patient Complaints</button>
+    </a>
+</div>
 
     <!-- JS file -->
     <script src="./script/formvalidation.js"></script>

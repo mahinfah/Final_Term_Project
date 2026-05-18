@@ -43,7 +43,7 @@ function appointmentLoad($conn){
     return $appointments;
 }
 
-// ✅ Get all specializations for dropdown
+//  Get all specializations for dropdown
 function getSpecializations($conn) {
     $sql = "SELECT id, name FROM specializations";
     $result = mysqli_query($conn, $sql);
@@ -54,10 +54,10 @@ function getSpecializations($conn) {
     return $specializations;
 }
 
-// ✅ Register doctor user account
+// Register doctor user account
 function registerDoctorUser($conn, $name, $email, $password, $phone) {
 
-    // ✅ Check if email already exists
+    // Check if email already exists
     $check  = "SELECT id FROM users WHERE email = '$email'";
     $result = mysqli_query($conn, $check);
 
@@ -65,7 +65,7 @@ function registerDoctorUser($conn, $name, $email, $password, $phone) {
         return false;
     }
 
-    // ✅ Hash password
+    //  Hash password
     $hashed = password_hash($password, PASSWORD_DEFAULT);
 
     $sql = "INSERT INTO users (name, email, password_hash, phone, role, is_active)
@@ -73,7 +73,7 @@ function registerDoctorUser($conn, $name, $email, $password, $phone) {
     return mysqli_query($conn, $sql);
 }
 
-// ✅ Register doctor profile
+//  Register doctor profile
 function registerDoctor($conn, $user_id, $specialization_id, $bio, $consultation_fee, $photo_path, $license_number, $experience_years) {
     $sql = "INSERT INTO doctors 
                 (user_id, specialization_id, bio, consultation_fee, photo_path, license_number, experience_years, is_approved)
@@ -82,7 +82,7 @@ function registerDoctor($conn, $user_id, $specialization_id, $bio, $consultation
     return mysqli_query($conn, $sql);
 }
 
-// ✅ Get all receptionists
+//  Get all receptionists
 function getAllReceptionists($conn) {
     $sql = "SELECT * FROM users WHERE role = 'receptionist'";
     $result = mysqli_query($conn, $sql);
@@ -93,17 +93,17 @@ function getAllReceptionists($conn) {
     return $receptionists;
 }
 
-// ✅ Get single receptionist by id
+//  Get single receptionist by id
 function getReceptionistById($conn, $id) {
     $sql    = "SELECT * FROM users WHERE id = '$id' AND role = 'receptionist'";
     $result = mysqli_query($conn, $sql);
     return mysqli_fetch_assoc($result);
 }
 
-// ✅ Create receptionist
+// Create receptionist
 function createReceptionist($conn, $name, $email, $password, $phone) {
 
-    // ✅ Check email exists
+    //  Check email exists
     $check  = "SELECT id FROM users WHERE email = '$email'";
     $result = mysqli_query($conn, $check);
 
@@ -117,7 +117,7 @@ function createReceptionist($conn, $name, $email, $password, $phone) {
     return mysqli_query($conn, $sql);
 }
 
-// ✅ Edit receptionist
+//  Edit receptionist
 function editReceptionist($conn, $id, $name, $email, $phone) {
     $sql = "UPDATE users 
             SET name  = '$name',
@@ -127,7 +127,7 @@ function editReceptionist($conn, $id, $name, $email, $phone) {
     return mysqli_query($conn, $sql);
 }
 
-// ✅ Deactivate receptionist
+//  Deactivate receptionist
 function deactivateReceptionist($conn, $id) {
     $sql = "UPDATE users 
             SET is_active = 0
@@ -135,7 +135,7 @@ function deactivateReceptionist($conn, $id) {
     return mysqli_query($conn, $sql);
 }
 
-// ✅ Activate receptionist
+//  Activate receptionist
 function activateReceptionist($conn, $id) {
     $sql = "UPDATE users 
             SET is_active = 1
@@ -143,7 +143,7 @@ function activateReceptionist($conn, $id) {
     return mysqli_query($conn, $sql);
 }
 
-// ✅ Get all specializations
+//  Get all specializations
 function getAllSpecializations($conn) {
     $sql    = "SELECT * FROM specializations";
     $result = mysqli_query($conn, $sql);
@@ -154,21 +154,21 @@ function getAllSpecializations($conn) {
     return $specializations;
 }
 
-// ✅ Get single specialization by id
+//  Get single specialization by id
 function getSpecializationById($conn, $id) {
     $sql    = "SELECT * FROM specializations WHERE id = '$id'";
     $result = mysqli_query($conn, $sql);
     return mysqli_fetch_assoc($result);
 }
 
-// ✅ Add specialization
+//  Add specialization
 function addSpecialization($conn, $name, $description) {
     $sql = "INSERT INTO specializations (name, description)
             VALUES ('$name', '$description')";
     return mysqli_query($conn, $sql);
 }
 
-// ✅ Rename specialization
+//  Rename specialization
 function renameSpecialization($conn, $id, $name, $description) {
     $sql = "UPDATE specializations 
             SET name        = '$name',
@@ -177,12 +177,12 @@ function renameSpecialization($conn, $id, $name, $description) {
     return mysqli_query($conn, $sql);
 }
 
-// ✅ Delete specialization
+//  Delete specialization
 function deleteSpecialization($conn, $id) {
     $sql = "DELETE FROM specializations WHERE id = '$id'";
     return mysqli_query($conn, $sql);
 }
-// ✅ Count total registered patients
+//  Count total registered patients
 function countPatients($conn) {
     $sql    = "SELECT COUNT(*) AS total FROM patients";
     $result = mysqli_query($conn, $sql);
@@ -190,7 +190,7 @@ function countPatients($conn) {
     return $row['total'];
 }
 
-// ✅ Count total active doctors
+//  Count total active doctors
 function countActiveDoctors($conn) {
     $sql    = "SELECT COUNT(*) AS total FROM users WHERE role = 'doctor' AND is_active = 1";
     $result = mysqli_query($conn, $sql);
@@ -198,7 +198,7 @@ function countActiveDoctors($conn) {
     return $row['total'];
 }
 
-// ✅ Count total pending billing
+// Count total pending billing
 function countPendingBilling($conn) {
     $sql    = "SELECT COUNT(*) AS total FROM billing WHERE payment_status = 'pending'";
     $result = mysqli_query($conn, $sql);
@@ -206,7 +206,7 @@ function countPendingBilling($conn) {
     return $row['total'];
 }
 
-// ✅ Get total revenue
+// Get total revenue
 function getTotalRevenue($conn) {
     $sql    = "SELECT SUM(amount) AS total FROM billing WHERE payment_status = 'paid'";
     $result = mysqli_query($conn, $sql);
