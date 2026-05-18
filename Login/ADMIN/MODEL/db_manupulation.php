@@ -205,3 +205,11 @@ function countPendingBilling($conn) {
     $row    = mysqli_fetch_assoc($result);
     return $row['total'];
 }
+
+// ✅ Get total revenue
+function getTotalRevenue($conn) {
+    $sql    = "SELECT SUM(amount) AS total FROM billing WHERE payment_status = 'paid'";
+    $result = mysqli_query($conn, $sql);
+    $row    = mysqli_fetch_assoc($result);
+    return $row['total'] ?? 0;
+}

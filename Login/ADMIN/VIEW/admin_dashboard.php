@@ -143,8 +143,8 @@ require_once '../CONTROLLER/dashboardLoad.php';
         </div>
 
         <div class="container">
-            <a href="appointment_policies.php">
-                <button class="B">Appointment Policies</button>
+            <a href="total_revenue.php">
+                <button class="B">Total Revenue</button>
             </a>
         </div>
 
