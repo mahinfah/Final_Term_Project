@@ -153,13 +153,15 @@ require_once '../CONTROLLER/dashboardLoad.php';
             </a>
         </div>
 
-    </div>
 
-<div class="container">
-    <a href="complaints.php">
-        <button class="B">Patient Complaints</button>
+        <div class="container">
+    <a href="doctor_reviews.php">
+        <button class="B">Doctor Reviews</button>
     </a>
 </div>
+
+    </div>
+
 
     <!-- JS file -->
     <script src="./script/formvalidation.js"></script>

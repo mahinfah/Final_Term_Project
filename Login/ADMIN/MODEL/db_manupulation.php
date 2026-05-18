@@ -213,3 +213,28 @@ function getTotalRevenue($conn) {
     $row    = mysqli_fetch_assoc($result);
     return $row['total'] ?? 0;
 }
+
+function getDoctorReviews($conn) {
+    $sql = "SELECT dr.id,
+                   dr.appointment_id,
+                   dr.patient_id,
+                   dr.doctor_id,
+                   dr.rating,
+                   dr.review_text,
+                   dr.created_at,
+                   du.name AS doctor_name,
+                   u.name  AS patient_name
+            FROM doctor_reviews dr
+            JOIN doctors d  ON dr.doctor_id  = d.id
+            JOIN users du   ON d.user_id     = du.id
+            JOIN patients p ON dr.patient_id = p.id
+            JOIN users u    ON p.user_id     = u.id
+            ORDER BY dr.created_at DESC";
+
+    $result  = mysqli_query($conn, $sql);
+    $reviews = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+        $reviews[] = $row;
+    }
+    return $reviews;
+}
