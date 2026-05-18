@@ -5,6 +5,7 @@ require_once __DIR__ . '/models/User.php';
 $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
 $loginRoot = preg_replace('#/patient$#i', '', $scriptDir);
 $doctorLoginPath = $loginRoot . '/Doctor/index.php';
+$receptionistDashboardPath = $loginRoot . '/RECEPTIONIST/VIEW/receptionist_dashboard.php';
 $error = '';
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
@@ -15,11 +16,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
         case 'doctor':
             header('Location: ' . $doctorLoginPath);
             exit;
-        case 'admin':
         case 'receptionist':
-            $roleName = ucfirst($_SESSION['role']);
+            header('Location: ' . $receptionistDashboardPath);
+            exit;
+        case 'admin':
             session_destroy();
-            $error = $roleName . ' dashboard is not available in this project.';
+            $error = 'Admin dashboard is not available in this project.';
             break;
         default:
             session_destroy();
@@ -52,12 +54,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                 case 'doctor':
                     $_SESSION['user_id'] = $loggedInUser['id'];
                     $_SESSION['role'] = $userRole;
+                    $_SESSION['email'] = $loggedInUser['email'];
                     $_SESSION['username'] = $loggedInUser['name'];
                     header('Location: ' . $doctorLoginPath);
                     exit;
-                case 'admin':
                 case 'receptionist':
-                    $error = ucfirst($role) . ' dashboard is not available in this project.';
+                    $_SESSION['user_id'] = $loggedInUser['id'];
+                    $_SESSION['role'] = $userRole;
+                    $_SESSION['email'] = $loggedInUser['email'];
+                    $_SESSION['name'] = $loggedInUser['name'];
+                    $_SESSION['username'] = $loggedInUser['name'];
+                    header('Location: ' . $receptionistDashboardPath);
+                    exit;
+                case 'admin':
+                    $error = 'Admin dashboard is not available in this project.';
                     break;
                 default:
                     $error = 'Invalid role selected.';

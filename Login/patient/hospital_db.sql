@@ -294,7 +294,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `password_hash`, `phone`, `role`, `profile_pic`, `is_active`, `created_at`) VALUES
 (1, 'John Patient', 'patient@test.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '01711111111', 'patient', NULL, 1, '2026-05-17 12:35:23'),
-(2, 'Dr. John Smith', 'doctor@test.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '01722222222', 'doctor', NULL, 1, '2026-05-17 12:35:23');
+(2, 'Dr. John Smith', 'doctor@test.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '01722222222', 'doctor', NULL, 1, '2026-05-17 12:35:23'),
+(3, 'Receptionist', 'reception@test.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '01777777777', 'receptionist', NULL, 1, '2026-05-17 12:35:23');
 
 --
 -- Indexes for dumped tables
