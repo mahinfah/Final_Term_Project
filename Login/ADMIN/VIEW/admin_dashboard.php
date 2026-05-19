@@ -89,7 +89,7 @@ require_once '../CONTROLLER/dashboardLoad.php';
 
     <!-- Logout -->
     <div style="text-align: right; padding: 10px;">
-        <a href="logout.php"><button>Logout</button></a>
+        <a href="../../index.php"><button>Logout</button></a>
     </div>
 
     <h1>Hospital Admin Dashboard</h1>

@@ -30,16 +30,16 @@ if ($action === "login") {
 
         if ($result && $result->num_rows > 0) {
 
-            // ✅ Fetch the row
+            
             $row = $result->fetch_assoc();
 
-            // ✅ Save in session
+    
             $_SESSION['msg']   = "Login Successful";
             $_SESSION['email'] = $row['email'];
             $_SESSION['name']  = $row['name'];
             $_SESSION['role']  = $row['role'];
 
-            // ✅ Redirect based on role
+            
             if ($row['role'] === 'admin') {
                 header("Location: ADMIN/VIEW/admin_dashboard.php");
             } else if ($row['role'] === 'receptionist') {

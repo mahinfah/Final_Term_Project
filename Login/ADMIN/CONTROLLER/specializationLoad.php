@@ -8,7 +8,7 @@ $conn            = conn_open();
 $specializations = getAllSpecializations($conn);
 $editData        = null;
 
-// ✅ Handle add
+
 if (isset($_POST['action']) && $_POST['action'] === 'add') {
     $name        = $_POST['name'];
     $description = $_POST['description'];
@@ -26,12 +26,10 @@ if (isset($_POST['action']) && $_POST['action'] === 'add') {
     }
 }
 
-// ✅ Handle edit form load
 if (isset($_GET['edit_id']) && !empty($_GET['edit_id'])) {
     $editData = getSpecializationById($conn, $_GET['edit_id']);
 }
 
-// ✅ Handle rename submit
 if (isset($_POST['action']) && $_POST['action'] === 'rename') {
     $id          = $_POST['id'];
     $name        = $_POST['name'];
@@ -51,7 +49,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'rename') {
     }
 }
 
-// ✅ Handle delete
+
 if (isset($_GET['delete_id']) && !empty($_GET['delete_id'])) {
     $result = deleteSpecialization($conn, $_GET['delete_id']);
     if ($result) {
