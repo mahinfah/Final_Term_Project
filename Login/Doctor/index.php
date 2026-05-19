@@ -9,6 +9,7 @@ $base_url = 'http://' . $_SERVER['HTTP_HOST'] . $base_dir;
 $loginRoot = preg_replace('#/Doctor$#i', '', str_replace('\\', '/', $base_dir));
 $patientLoginPath = $loginRoot . '/patient/index.php';
 $receptionistDashboardPath = $loginRoot . '/RECEPTIONIST/VIEW/receptionist_dashboard.php';
+$adminDashboardPath = $loginRoot . '/ADMIN/VIEW/admin_dashboard.php';
 
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
@@ -21,6 +22,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
             exit;
         case 'receptionist':
             header('Location: ' . $receptionistDashboardPath);
+            exit;
+        case 'admin':
+            header('Location: ' . $adminDashboardPath);
             exit;
     }
 }
@@ -56,8 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                     header('Location: ' . $receptionistDashboardPath);
                     exit;
                 case 'admin':
-                    $error = 'Admin dashboard is not available in this project.';
-                    break;
+                    header('Location: ' . $adminDashboardPath);
+                    exit;
                 default:
                     $error = 'Invalid role selected.';
             }

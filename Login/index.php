@@ -1,9 +1,8 @@
 <?php
 session_start();
 
-require_once 'RECEPTIONIST/MODEL/db_connection.php';
-require_once 'RECEPTIONIST/MODEL/db_manupulation.php';
-require_once 'RECEPTIONIST/MODEL/db_close.php';
+require_once 'ADMIN/MODEL/db_connection.php';
+require_once 'ADMIN/MODEL/db_close.php';
 
 if (!isset($_SESSION['msg'])) {
     $_SESSION['msg'] = "";
@@ -44,6 +43,9 @@ if ($action === "login") {
                 $_SESSION['role'] = strtolower(trim($row['role']));
 
                 switch ($_SESSION['role']) {
+                    case 'admin':
+                        header("Location: ADMIN/VIEW/admin_dashboard.php");
+                        exit;
                     case 'doctor':
                         header("Location: Doctor/controllers/DoctorController.php");
                         exit;
@@ -138,6 +140,12 @@ if ($action === "login") {
             text-align: center;
             margin-bottom: 10px;
         }
+
+        .links {
+            text-align: center;
+            margin: 15px 0 0;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -157,6 +165,7 @@ if ($action === "login") {
 
         <select name="role" required>
             <option value="">Select Role</option>
+            <option value="admin">Admin</option>
             <option value="doctor">Doctor</option>
             <option value="patient">Patient</option>
             <option value="receptionist">Receptionist</option>
@@ -168,8 +177,8 @@ if ($action === "login") {
         <button type="submit">Login</button>
     </form>
 
-    <p style="text-align:center; margin:15px 0 0;">
-        <a href="RECEPTIONIST/VIEW/registration_rep.php">Register Receptionist</a>
+    <p class="links">
+        New Patient? <a href="patient/views/register.php">Register here</a>
     </p>
 </div>
 

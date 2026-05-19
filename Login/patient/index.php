@@ -6,6 +6,7 @@ $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
 $loginRoot = preg_replace('#/patient$#i', '', $scriptDir);
 $doctorLoginPath = $loginRoot . '/Doctor/index.php';
 $receptionistDashboardPath = $loginRoot . '/RECEPTIONIST/VIEW/receptionist_dashboard.php';
+$adminDashboardPath = $loginRoot . '/ADMIN/VIEW/admin_dashboard.php';
 $error = '';
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
@@ -20,9 +21,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
             header('Location: ' . $receptionistDashboardPath);
             exit;
         case 'admin':
-            session_destroy();
-            $error = 'Admin dashboard is not available in this project.';
-            break;
+            header('Location: ' . $adminDashboardPath);
+            exit;
         default:
             session_destroy();
             header('Location: index.php');
@@ -67,8 +67,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                     header('Location: ' . $receptionistDashboardPath);
                     exit;
                 case 'admin':
-                    $error = 'Admin dashboard is not available in this project.';
-                    break;
+                    $_SESSION['user_id'] = $loggedInUser['id'];
+                    $_SESSION['role'] = $userRole;
+                    $_SESSION['email'] = $loggedInUser['email'];
+                    $_SESSION['name'] = $loggedInUser['name'];
+                    $_SESSION['username'] = $loggedInUser['name'];
+                    header('Location: ' . $adminDashboardPath);
+                    exit;
                 default:
                     $error = 'Invalid role selected.';
             }
