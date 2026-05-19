@@ -2,7 +2,6 @@
 session_start();
 
 require_once 'ADMIN/MODEL/db_connection.php';
-require_once 'ADMIN/MODEL/db_manupulation.php';
 require_once 'ADMIN/MODEL/db_close.php';
 
 if (!isset($_SESSION['msg'])) {
@@ -12,9 +11,9 @@ if (!isset($_SESSION['msg'])) {
 $action = $_POST['action'] ?? '';
 
 if ($action === "login") {
-    $email    = $_POST['email'] ?? '';
+    $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
-    $role     = $_POST['role'] ?? '';
+    $role = strtolower(trim($_POST['role'] ?? ''));
 
     if (empty($email) || empty($password) || empty($role)) {
         $_SESSION['msg'] = "Email, password, and role required";
@@ -25,38 +24,49 @@ if ($action === "login") {
     $conn = conn_open();
 
     if ($conn) {
-        $sql    = "SELECT * FROM users WHERE email='$email' AND password_hash='$password' AND role='$role'";
-        $result = $conn->query($sql);
+        $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? AND role = ? AND is_active = 1");
+        $stmt->bind_param("ss", $email, $role);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         if ($result && $result->num_rows > 0) {
-
-            // ✅ Fetch the row
             $row = $result->fetch_assoc();
+            $storedPassword = $row['password_hash'];
+            $passwordMatches = password_verify($password, $storedPassword) || hash_equals($storedPassword, $password);
 
-            // ✅ Save in session
-            $_SESSION['msg']   = "Login Successful";
-            $_SESSION['email'] = $row['email'];
-            $_SESSION['name']  = $row['name'];
-            $_SESSION['role']  = $row['role'];
+            if ($passwordMatches) {
+                $_SESSION['msg'] = "Login Successful";
+                $_SESSION['user_id'] = $row['id'];
+                $_SESSION['email'] = $row['email'];
+                $_SESSION['name'] = $row['name'];
+                $_SESSION['username'] = $row['name'];
+                $_SESSION['role'] = strtolower(trim($row['role']));
 
-            // ✅ Redirect based on role
-            if ($row['role'] === 'admin') {
-                header("Location: ADMIN/VIEW/admin_dashboard.php");
-            } else if ($row['role'] === 'receptionist') {
-                header("Location: RECEPTIONIST/VIEW/receptionist_dashboard.php");
-            } else if ($row['role'] === 'doctor') {
-                header("Location: DOCTOR/VIEW/doctor_dashboard.php");
-            } else if ($row['role'] === 'patient') {
-                header("Location: PATIENT/VIEW/patient_dashboard.php");
+                switch ($_SESSION['role']) {
+                    case 'admin':
+                        header("Location: ADMIN/VIEW/admin_dashboard.php");
+                        exit;
+                    case 'doctor':
+                        header("Location: Doctor/controllers/DoctorController.php");
+                        exit;
+                    case 'patient':
+                        header("Location: patient/controllers/PatientController.php");
+                        exit;
+                    case 'receptionist':
+                        header("Location: RECEPTIONIST/VIEW/receptionist_dashboard.php");
+                        exit;
+                    default:
+                        $_SESSION['msg'] = "Dashboard is not available for this role";
+                        break;
+                }
+            } else {
+                $_SESSION['msg'] = "Invalid login details";
             }
-            exit;
-
         } else {
             $_SESSION['msg'] = "Invalid login details";
         }
 
         conn_close($conn);
-
     } else {
         $_SESSION['msg'] = "Database connection failed";
     }
@@ -92,6 +102,7 @@ if ($action === "login") {
         h2 {
             text-align: center;
             margin-bottom: 20px;
+            color: #2c3e50;
         }
 
         input, select {
@@ -106,23 +117,41 @@ if ($action === "login") {
         button {
             width: 100%;
             padding: 10px;
-            background: blue;
+            background: #3498db;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 15px;
         }
 
-        button:hover { background: darkblue; }
+        button:hover {
+            background: #2980b9;
+        }
 
-        .error   { color: red;   text-align: center; margin-bottom: 10px; }
-        .success { color: green; text-align: center; margin-bottom: 10px; }
+        .success {
+            color: green;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .links {
+            text-align: center;
+            margin: 15px 0 0;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Login</h2>
+    <h2>Hospital Login</h2>
 
     <?php if (isset($_SESSION['msg']) && !empty($_SESSION['msg'])): ?>
         <div class="<?php echo $_SESSION['msg'] === 'Login Successful' ? 'success' : 'error'; ?>">
@@ -142,11 +171,15 @@ if ($action === "login") {
             <option value="receptionist">Receptionist</option>
         </select>
 
-        <input type="email"    name="email"    placeholder="Email"    required>
+        <input type="email" name="email" placeholder="Email" required>
         <input type="password" name="password" placeholder="Password" required>
 
         <button type="submit">Login</button>
     </form>
+
+    <p class="links">
+        New Patient? <a href="patient/views/register.php">Register here</a>
+    </p>
 </div>
 
 </body>
